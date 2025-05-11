@@ -15,6 +15,11 @@ export const ORDER_TYPE = {
   CANCELED: '5'
 }
 
+export const USER_TYPE = {
+  ADMIN: 'admin',
+  STUDENT: 'student'
+}
+
 export const ORDER_STATUS = {
   [ORDER_TYPE.PENDING]: {
     text: 'Chờ phê duyệt'
@@ -30,5 +35,14 @@ export const ORDER_STATUS = {
   },
   [ORDER_TYPE.CANCELED]: {
     text: 'Đã hủy'
+  }
+}
+
+export const USER_ROLE = {
+  [USER_TYPE.ADMIN]: {
+    text: 'Quản trị'
+  },
+  [USER_TYPE.STUDENT]: {
+    text: 'Sinh viên'
   }
 }

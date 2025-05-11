@@ -6,7 +6,7 @@ import RangerPicker from 'common/components/rangePicker/RangePicker'
 import { CommonStatus } from 'common/constants/constants'
 import { SortBy } from '../constants/product.constants'
 import { useEffect, useState } from 'react'
-import { categoryServices } from 'features/admin/Category/CategoryApis'
+import { categoryServices } from 'features/admin/Building/BuildingApis'
 
 interface IFilter {
   onChangeValue?: any

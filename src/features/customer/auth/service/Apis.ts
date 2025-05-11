@@ -10,6 +10,6 @@ export const authService = {
     return AxiosClient.post('/auth/login', data)
   },
   getUserInfo: () => {
-    return AxiosClient.get('/user')
+    return AxiosClient.get('/auth/getUserInfo')
   }
 }

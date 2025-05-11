@@ -2,7 +2,8 @@
 import { notification } from 'antd'
 import Config from './constants/config'
 import { cloneDeep } from 'lodash'
-import { ORDER_STATUS } from './constants/constants'
+import { ORDER_STATUS, USER_ROLE } from './constants/constants'
+import { USER_ROLES } from './types/common.type'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error'
 
@@ -50,7 +51,8 @@ export const getDataSource = (data: any, page: number) => {
       key: value.id,
       STT: Config.getIndexTable(page, index),
       textStatus: value.status === 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động',
-      status: value.status == 1 ? 'Đang hoạt động' : 'Ngừng hoạt động',
+      status: value.status == 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động',
+      role: value.role === USER_ROLES.ADMIN ? 'Quản trị' : 'Sinh viên',
       s: value.status,
       createdAt: formatDate(value.created_at),
       category: value?.category?.name
@@ -60,6 +62,10 @@ export const getDataSource = (data: any, page: number) => {
 
 export const vldOrderStatus = (value: string) => {
   return `${ORDER_STATUS[value].text}`
+}
+
+export const vldStatus = (value: string) => {
+  return `${USER_ROLE[value].text}`
 }
 
 export function formatPrice(num: string | any, type?: 'VND' | '$') {

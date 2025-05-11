@@ -1,8 +1,8 @@
 @layer base {
   :root {
     --primary: #000;
-    --baseBackground: #fff;
-    --hover: #000077;
+    --baseBackground: rgba(255, 112, 60, 1);
+    --hover: rgb(230, 79, 25);
     --button: #000;
     --buttonConfirm: #000;
     --text-custom-xl: '24px';

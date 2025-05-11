@@ -1,7 +1,7 @@
 const COLORS = {
   primary: 'var(--primary)',
   baseBackground: 'var(--baseBackground)',
-  hover: 'var(--hover)'
+  hoverBase: 'var(--hover)'
 }
 
 /** @type {import('tailwindcss').Config} */

@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  DesktopOutlined,
-  PieChartOutlined,
-  UserOutlined,
-  LogoutOutlined,
-  SettingOutlined,
-  BookOutlined
-} from '@ant-design/icons'
+import { PieChartOutlined, UserOutlined, LogoutOutlined, SettingOutlined, BookOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { openNotification } from 'common/utils'
 import { setLogin } from 'redux/slice/login.slice'
 
@@ -37,15 +30,17 @@ function getItem(
 
 const itemsMenu: MenuItem[] = [
   getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <PieChartOutlined />),
-  getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <UserOutlined />),
-  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <DesktopOutlined />),
-  getItem('Bán hàng', 'sub1', <UserOutlined />, [
-    getItem(<Link to={ADMIN_PATH.CATEGORY}>Danh mục</Link>, '4'),
-    getItem(<Link to={ADMIN_PATH.PRODUCT}>Sản phẩm</Link>, '5'),
-    getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6')
+  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '2', <UserOutlined />),
+  getItem('Kí túc xá', 'sub1', <UserOutlined />, [
+    getItem(<Link to={ADMIN_PATH.BUILDING}>Tòa nhà</Link>, '4'),
+    getItem(<Link to={ADMIN_PATH.PRODUCT}>Phòng</Link>, '5'),
+    getItem(<Link to={ADMIN_PATH.ROOM_TYPE}>Loại phòng</Link>, '6'),
+    getItem(<Link to={ADMIN_PATH.DEVICE}>Thiết bị</Link>, '7'),
+    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu thuê phòng</Link>, '8'),
+    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu hỗ trợ</Link>, '9')
   ]),
   getItem('Cấu hình', 'sub2', <SettingOutlined />, [
-    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '7', <BookOutlined />)
+    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '10', <BookOutlined />)
   ])
 ]
 
@@ -55,6 +50,9 @@ const AdminLayout: React.FC = ({ children }: any) => {
   const [keySider, setKeySider] = useState<string>('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const userData = useSelector((state: any) => state.login)
+  console.log('🚀 ~ userData:', userData)
+
   const {
     token: { colorBgContainer }
   } = theme.useToken()
@@ -107,7 +105,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setTitleHeader('Thêm mới/Cập nhật sản phẩm')
           setKeySider('5')
           break
-        case ADMIN_PATH.CATEGORY:
+        case ADMIN_PATH.BUILDING:
           setTitleHeader('Danh sách danh mục')
           setKeySider('4')
           break
@@ -127,6 +125,14 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setTitleHeader('Thống kê báo cáo')
           setKeySider('1')
           break
+        case ADMIN_PATH.ROOM_TYPE:
+          setTitleHeader('Loại phòng')
+          setKeySider('6')
+          break
+        case ADMIN_PATH.DEVICE:
+          setTitleHeader('Thiết bị')
+          setKeySider('7')
+          break
 
         default:
           setTitleHeader('Tổng quan')
@@ -138,17 +144,20 @@ const AdminLayout: React.FC = ({ children }: any) => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className='w-full flex justify-center'>
-          <img src='/LOGO-WEBSHOP.jpg' className='w-[60px]' />
+          <img src='/logo-utt-2.png' className='w-[100px] mt-3' />
         </div>
         <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
       </Sider>
       <Layout>
         <Header style={{ background: colorBgContainer }} className='flex items-center justify-between pr-4 pl-4'>
           <div className='text-custom-sm'>{titleHeader}</div>
-          <div>
-            <Dropdown menu={{ items }} placement='bottomRight' arrow>
-              <Avatar size={40} icon={<UserOutlined />} />
-            </Dropdown>
+          <div className='flex items-center justify-start'>
+            <div className='mr-4'>{userData?.user?.name}</div>
+            <div>
+              <Dropdown menu={{ items }} placement='bottomRight' arrow>
+                <Avatar size={40} icon={<UserOutlined />} />
+              </Dropdown>
+            </div>
           </div>
         </Header>
         <Content className='bg-while p-4'>{children}</Content>

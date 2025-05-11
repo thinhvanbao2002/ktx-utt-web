@@ -1,5 +1,4 @@
 import { Button, Col, Form, Input, Row } from 'antd'
-import UploadSingleFile from 'common/components/upload/UploadComponent'
 import Config from 'common/constants/config'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
 import { IAccount } from '../Manager.props'
@@ -22,7 +21,6 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     avatar: rowSelected?.avatar,
     status: rowSelected?.s
   }
-  console.log('🚀 ~ AddEditManager ~ initialvalue:', initialvalue)
 
   return (
     <Form
@@ -66,7 +64,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input readOnly />
+            <Input />
           </Form.Item>
         </Col>
       </Row>
@@ -86,7 +84,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input readOnly />
+            <Input />
           </Form.Item>
         </Col>
         {!rowSelected && (
@@ -136,7 +134,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
           </Col>
         )}
       </Row>
-      <Row gutter={24}>
+      {/* <Row gutter={24}>
         <Col span={12}>
           <Form.Item name='avatar' label='Ảnh đại diện'>
             <UploadSingleFile
@@ -148,7 +146,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
             />
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
 
       <Row gutter={24}>
         <Col span={12}> </Col>

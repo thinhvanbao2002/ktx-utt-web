@@ -1,36 +1,34 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Row, Spin, Tag } from 'antd'
-import { Styled } from 'styles/stylesComponent'
+import { Button, Row, Spin } from 'antd'
+import FilterCategory from './components/FilterRoomType'
 import { useCallback, useEffect, useState } from 'react'
-import FilterAccount from './components/FilterAccount'
-import { IAccount, IColumnAntD, IPayLoadListUser } from './Manager.props'
-import { accountServices } from './ManagerApis'
-import { getDataSource, openNotification, openNotificationError } from 'common/utils'
-import ModalComponent from 'common/components/modal/Modal'
-import { AddEditManager } from './components/AddEditAccount'
+import { IColumnAntD } from 'common/constants/interface'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
+import { Styled } from 'styles/stylesComponent'
+import ModalComponent from 'common/components/modal/Modal'
+import { IPayLoadLisCategory } from './RoomType.props'
+import { roomTypeServices } from './RoomTypeApis'
+import { getDataSource, openNotification } from 'common/utils'
+import { AddEditCategory } from './components/AddEditRoomType'
 
-function ManagerPage() {
-  const [page, setPage] = useState<number>(1)
-  const [payload, setPayload] = useState<IPayLoadListUser>({
+function RoomTypePage() {
+  const [payload, setPayload] = useState<IPayLoadLisCategory>({
     page: 1,
-    take: 5,
+    take: 10,
     q: '',
-    status: '',
+    status: 1,
     to_date: '',
     from_date: ''
   })
-  const [accounts, setAccount] = useState<any>([])
+  const [categories, setCategory] = useState<any>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
-  const [textButton, setTextButton] = useState<string>('')
-  const [count, setCount] = useState<number>(0)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [rowSelected, setRowSelected] = useState<IAccount>()
+  const [count, setCount] = useState<number>(12)
+  const [rowSelected, setRowSelected] = useState<any>()
 
-  const columnsListAccount: IColumnAntD[] = [
+  const columnsListCategory: IColumnAntD[] = [
     {
       title: 'STT',
       key: 'STT',
@@ -38,31 +36,21 @@ function ManagerPage() {
       width: 20
     },
     {
-      title: 'Họ và tên',
+      title: 'Tên loại phòng',
       key: 'name',
       dataIndex: 'name'
     },
     {
-      title: 'Email',
-      key: 'email',
-      dataIndex: 'email'
+      title: 'Số sinh viên tối đa',
+      key: 'max_student',
+      dataIndex: 'max_student',
+      width: 280
     },
+
     {
-      title: 'Số điện thoại',
-      key: 'phone',
-      dataIndex: 'phone'
-    },
-    {
-      title: 'Loại tài khoản',
-      key: 'role',
-      dataIndex: 'role'
-    },
-    {
-      title: 'Trạng thái',
-      key: 'status',
-      dataIndex: 'status',
-      render: (text: string, record: any) =>
-        record.s == 'active' ? <Tag color={'blue'}>{text}</Tag> : <Tag color={'red'}>{text}</Tag>
+      title: 'Giá tiền',
+      key: 'price',
+      dataIndex: 'price'
     },
     {
       title: 'Ngày tạo',
@@ -105,11 +93,10 @@ function ManagerPage() {
     }
   ]
 
-  const handleGetAccount = async (payload?: IPayLoadListUser) => {
+  const handleGetCategories = async (payload?: any) => {
     try {
-      const res = await accountServices.get(payload)
-      setAccount(getDataSource(res?.data, 1))
-
+      const res = await roomTypeServices.get(payload)
+      setCategory(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)
@@ -117,12 +104,12 @@ function ManagerPage() {
   }
 
   useEffect(() => {
-    handleGetAccount(payload)
+    handleGetCategories(payload)
   }, [payload])
 
   const handleFilter = useCallback(
     (value: any) => {
-      if (value?.status) {
+      if (value?.status !== null || value?.status !== undefined) {
         setPayload({
           ...payload,
           status: value.status,
@@ -146,27 +133,21 @@ function ManagerPage() {
     [payload]
   )
 
-  const handleSetModalVisible = useCallback(() => {
-    setModalVisible(false)
-    setRowSelected(undefined)
-  }, [])
-
   const handleSubmit = async (value: any) => {
     setIsLoading(true)
     const payLoadAccount = {
       id: rowSelected?.id,
       name: value?.name,
-      phone: value?.phone,
-      email: value?.email,
-      status: value?.status || null,
-      avatar: value?.avatar
+      price: value?.price,
+      max_student: value?.max_student
     }
+    console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res
     try {
       if (rowSelected?.id) {
-        res = await accountServices.put(payLoadAccount)
+        res = await roomTypeServices.patch(payLoadAccount)
       } else {
-        res = await accountServices.post({ ...payLoadAccount, password: value?.password, status: 'active' })
+        res = await roomTypeServices.post({ ...payLoadAccount })
       }
 
       if (res.status == 1) {
@@ -181,62 +162,80 @@ function ManagerPage() {
         }
         setIsLoading(false)
         setModalVisible(false)
-        handleGetAccount()
+        handleGetCategories()
       }
     } catch (error) {
-      openNotificationError(error)
-      setIsLoading(false)
+      console.log('🚀 ~ handleSubmit ~ error:', error)
     }
   }
 
-  const handleEditAccount = useCallback(async (record: IAccount) => {
+  const handleEditAccount = useCallback(async (record: any) => {
     setModalVisible(true)
     setRowSelected(record)
   }, [])
 
-  const handleRemoveAccount = useCallback(
-    async (value: any) => {
-      try {
-        const res = await accountServices.delete(value?.id)
-        if (res) {
-          openNotification('success', 'Thành công', 'Xóa tài khoản thành công')
-          handleGetAccount()
-        }
-      } catch (error) {
-        console.log('🚀 ~ error:', error)
+  const handleRemoveAccount = useCallback(async (record: any) => {
+    try {
+      const res = await roomTypeServices.delete(record?.id)
+      if (res) {
+        openNotification('success', 'Thành công', 'Xóa danh mục thành công')
+        setIsLoading(true)
+        handleGetCategories()
+        setIsLoading(false)
       }
-    },
-    [payload]
-  )
+    } catch (error) {
+      console.log('🚀 ~ handleRemoveAccount ~ error:', error)
+    }
+  }, [])
+
+  const handleClose = useCallback(() => {
+    setModalVisible(false)
+    setRowSelected(undefined)
+  }, [])
 
   return (
     <>
       <Row gutter={[15, 6]} className='mb-2'>
-        <FilterAccount onChangeValue={handleFilter} />
+        <FilterCategory onChangeValue={handleFilter} />
       </Row>
       <Row className='mb-2 flex justify-end'>
         <Button
-          className='bg-baseBackground hover:!bg-hoverBase'
-          type='primary'
+          className='bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while'
           onClick={() => {
             setModalVisible(true)
-            setTitle('Thêm mới quản trị viên')
-            setTextButton('Thêm mới')
+            setTitle('Thêm mới tòa nhà')
+            // setTextButton('Thêm mới')
           }}
         >
           Thêm mới
         </Button>
-        {/* <Button className='ml-2' type='primary'>
+        {/* <Button
+          className='ml-2 bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while'
+          type='primary'
+        >
           Xuất Excel
         </Button> */}
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle
           bordered
-          columns={columnsListAccount}
-          dataSource={accounts}
+          columns={columnsListCategory}
+          dataSource={categories}
           pagination={{
-            pageSize: payload.take,
             onChange: (page) => {
               setIsLoading(true)
               setTimeout(() => {
@@ -245,19 +244,20 @@ function ManagerPage() {
               }, 200)
             },
             total: count,
-            current: payload.page
+            current: payload.page,
+            pageSize: payload.take
           }}
         />
       </Spin>
       <ModalComponent
         loading={isLoading}
-        title='Thêm mới / cập nhật tài khoản'
+        title={title}
         width={1000}
         modalVisible={modalVisible}
-        children={<AddEditManager rowSelected={rowSelected} onFinish={handleSubmit} onClose={handleSetModalVisible} />}
+        children={<AddEditCategory onFinish={handleSubmit} onClose={handleClose} rowSelected={rowSelected} />}
       />
     </>
   )
 }
 
-export default ManagerPage
+export default RoomTypePage

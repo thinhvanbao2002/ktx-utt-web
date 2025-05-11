@@ -1,5 +1,5 @@
-import { Button, Row, Spin } from 'antd'
-import FilterCategory from './components/FilterCategory'
+import { Button, Row, Spin, Tag } from 'antd'
+import FilterCategory from './components/FilterBuilding'
 import { useCallback, useEffect, useState } from 'react'
 import { IColumnAntD } from 'common/constants/interface'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
@@ -7,10 +7,10 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 import { Styled } from 'styles/stylesComponent'
 import ModalComponent from 'common/components/modal/Modal'
-import { ICategory, IPayLoadLisCategory } from './Category.props'
-import { categoryServices } from './CategoryApis'
+import { ICategory, IPayLoadLisCategory } from './Building.props'
+import { categoryServices } from './BuildingApis'
 import { getDataSource, openNotification } from 'common/utils'
-import { AddEditCategory } from './components/AddEditCategory'
+import { AddEditCategory } from './components/AddEditBuilding'
 
 function CategoryPage() {
   const [payload, setPayload] = useState<IPayLoadLisCategory>({
@@ -36,14 +36,28 @@ function CategoryPage() {
       width: 20
     },
     {
-      title: 'Tên danh mục',
+      title: 'Tên tòa nhà',
       key: 'name',
       dataIndex: 'name'
+    },
+
+    {
+      title: 'Địa chỉ',
+      key: 'address',
+      dataIndex: 'address'
+    },
+
+    {
+      title: 'Ghi chú',
+      key: 'note',
+      dataIndex: 'note'
     },
     {
       title: 'Trạng thái',
       key: 'status',
-      dataIndex: 'status'
+      dataIndex: 'status',
+      render: (text: string, record: any) =>
+        record.s == 'active' ? <Tag color={'blue'}>{text}</Tag> : <Tag color={'red'}>{text}</Tag>
     },
     {
       title: 'Ngày tạo',
@@ -131,6 +145,8 @@ function CategoryPage() {
     const payLoadAccount = {
       id: rowSelected?.id,
       name: value?.name,
+      address: value?.address,
+      note: value?.note,
       status: value?.status
     }
     let res
@@ -192,16 +208,33 @@ function CategoryPage() {
       </Row>
       <Row className='mb-2 flex justify-end'>
         <Button
-          type='primary'
+          className='bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while'
           onClick={() => {
             setModalVisible(true)
-            setTitle('Thêm mới danh mục')
+            setTitle('Thêm mới tòa nhà')
             // setTextButton('Thêm mới')
           }}
         >
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
+        <Button
+          className='ml-2 bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while'
+          type='primary'
+        >
           Xuất Excel
         </Button>
       </Row>
@@ -227,7 +260,7 @@ function CategoryPage() {
       <ModalComponent
         loading={isLoading}
         title={title}
-        width={500}
+        width={1000}
         modalVisible={modalVisible}
         children={<AddEditCategory onFinish={handleSubmit} onClose={handleClose} rowSelected={rowSelected} />}
       />

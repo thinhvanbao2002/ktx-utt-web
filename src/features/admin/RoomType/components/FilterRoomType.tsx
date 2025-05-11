@@ -13,7 +13,7 @@ function FilterCategory({ onChangeValue }: IFilter) {
     <>
       <Col md={7}>
         <RJSearch
-          placeholder='Nhập tên danh mục'
+          placeholder='Nhập tên loại phòng'
           onInputSearch={(value: string) => {
             onChangeValue({ search: value })
           }}

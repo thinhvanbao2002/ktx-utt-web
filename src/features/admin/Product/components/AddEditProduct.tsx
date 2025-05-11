@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row } from 'antd'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
-import { categoryServices } from 'features/admin/Category/CategoryApis'
+import { categoryServices } from 'features/admin/Building/BuildingApis'
 import { useEffect, useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ReactQuill from 'react-quill'

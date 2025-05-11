@@ -6,22 +6,23 @@ import React, { lazy } from 'react'
 const AdminLayout = lazy(() => import('../common/layout/AdminLayout/adminLayout.tsx'))
 
 //Admin
-const AdminLogin = lazy(() => import('../features/admin/Auth/auth.tsx'))
 const AdminDashBoard = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
 const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx'))
 const CustomerPage = lazy(() => import('../features/admin/Customer/CustomerPage.tsx'))
-const CategoryPage = lazy(() => import('../features/admin/Category/CategoryPage.tsx'))
+const CategoryPage = lazy(() => import('../features/admin/Building/BuildingPage.tsx'))
 const AdminProductPage = lazy(() => import('../features/admin/Product/ProductPage.tsx'))
 const AdminProductForm = lazy(() => import('../features/admin/Product/components/AddEditProduct.tsx'))
 const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
 const AddEditBlogPage = lazy(() => import('../features/admin/Blog/components/AddEditBlog.tsx'))
 const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'))
 const AdminEditOrder = lazy(() => import('../features/admin/Order/components/OrderDetail.tsx'))
+const RoomType = lazy(() => import('../features/admin/RoomType/RoomTypePage.tsx'))
+const DevicePage = lazy(() => import('../features/admin/Device/DevicePage.tsx'))
 
 //User
-const HomePage = lazy(() => import('../features/customer/home/Home.tsx'))
+const HomePage = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
 const UserLayout = lazy(() => import('../common/layout/UserLayout/userLayout.tsx'))
-const CustomerLoginPage = lazy(() => import('../features/customer/auth/Login.tsx'))
+const CustomerLoginPage = lazy(() => import('../features/admin/Auth/auth.tsx'))
 const RegisterPage = lazy(() => import('../features/customer/register/Register.tsx'))
 const ProductPage = lazy(() => import('../features/customer/product/Product.tsx'))
 const ProductDetail = lazy(() => import('../features/customer/detailProduct/DetailProduct.tsx'))
@@ -42,6 +43,11 @@ interface RouterProps {
 }
 
 export const adminRoutes: Array<RouterProps> = [
+  {
+    path: '',
+    component: HomePage,
+    layout: AdminLayout
+  },
   {
     path: ADMIN_PATH.OVERVIEW,
     component: AdminDashBoard,
@@ -68,7 +74,7 @@ export const adminRoutes: Array<RouterProps> = [
     layout: AdminLayout
   },
   {
-    path: ADMIN_PATH.CATEGORY,
+    path: ADMIN_PATH.BUILDING,
     component: CategoryPage,
     layout: AdminLayout
   },
@@ -101,15 +107,20 @@ export const adminRoutes: Array<RouterProps> = [
     path: `${ADMIN_PATH.UPDATE_ORDER}/:id`,
     component: AdminEditOrder,
     layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.ROOM_TYPE,
+    component: RoomType,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.DEVICE,
+    component: DevicePage,
+    layout: AdminLayout
   }
 ]
 
 export const userRoutes: Array<RouterProps> = [
-  {
-    path: USER_PATH.CART,
-    component: AdminLogin,
-    layout: UserLayout
-  },
   {
     path: USER_PATH.ORDER_SUCCESS,
     component: OrderSuccess
@@ -118,16 +129,7 @@ export const userRoutes: Array<RouterProps> = [
 
 export const publicRoutes: Array<RouterProps> = [
   {
-    path: '',
-    component: HomePage,
-    layout: UserLayout
-  },
-  {
     path: ADMIN_PATH.LOGIN,
-    component: AdminLogin
-  },
-  {
-    path: USER_PATH.LOGIN,
     component: CustomerLoginPage
   },
   {

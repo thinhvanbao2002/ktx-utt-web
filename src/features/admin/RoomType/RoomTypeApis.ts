@@ -1,35 +1,31 @@
 import { handleObjectEmpty } from 'common/utils'
 import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
-import { IAccount } from './Manager.props'
+import { IRoomType, IPayLoadLisCategory } from './RoomType.props'
 
-export interface IQuery {
-  page: number
-}
-
-export const accountServices = {
-  get: (params: IQuery) => {
-    const url = '/user'
+export const roomTypeServices = {
+  get: (params: IPayLoadLisCategory) => {
+    const url = '/room_type'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
-  post: (value: IAccount) => {
-    const url = '/user'
+  post: (payload: IRoomType) => {
+    const url = '/room_type'
     return AxiosClient.post(url, {
-      ...value,
-      role: 'admin'
+      ...payload
     })
   },
-  put: (value: IAccount) => {
-    const url = `/user/${value?.id}`
-    return AxiosClient.put(url, {
+  patch: (value: any) => {
+    console.log('🚀 ~ value:', value)
+    const url = `/room_type/${value?.id}`
+    return AxiosClient.patch(url, {
       ...value
     })
   },
   delete: (id: number) => {
-    const url = `/user/${id}`
+    const url = `/room_type/${id}`
     return AxiosClient.delete(url)
   }
 }

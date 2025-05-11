@@ -1,9 +1,9 @@
 export const ADMIN_PATH = {
-  LOGIN: '/ad-login',
+  LOGIN: '/login',
   OVERVIEW: '/admin',
   CUSTOMER: '/ad-customer',
   MANAGER: '/ad-manager',
-  CATEGORY: '/ad-category',
+  BUILDING: '/building',
   PRODUCT: '/ad-product',
   CREATE_UPDATE_PRODUCT: '/ad-ce-product',
   CREATE_UPDATE_BLOG: '/ad-ce-blog',
@@ -11,7 +11,9 @@ export const ADMIN_PATH = {
   ORDER: '/ad-order',
   BLOG: '/ad-blog',
   UPLOAD: '/upload',
-  UPLOADS: '/upload-multipart'
+  UPLOADS: '/upload-multipart',
+  ROOM_TYPE: '/room-type',
+  DEVICE: '/device'
 }
 
 export const USER_PATH = {
