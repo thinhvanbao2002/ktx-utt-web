@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 const { Option } = Select
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import 'react-quill/dist/quill.snow.css'
-import { ProductTypes } from '../constants/room.constants'
 import UploadMultipart from 'common/components/upload/UploadMultipartComponent'
 import Config from 'common/constants/config'
 import { useLocation } from 'react-router'
@@ -15,7 +14,6 @@ import { openNotification } from 'common/utils'
 import { productServices } from '../RoomApis'
 import { IProduct } from '../Room.props'
 import { useNavigate } from 'react-router-dom'
-import TextArea from 'antd/es/input/TextArea'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { roomTypeServices } from 'features/admin/RoomType/RoomTypeApis'
 

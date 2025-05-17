@@ -106,7 +106,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               defaultValue={'user'}
               options={[
                 { value: 'admin', text: 'Quản trị viên' },
-                { value: 'student', text: 'Sinh viên' },
+                { value: 'student', text: 'Sinh viên' }
               ]}
               placeholder='Chọn vai trò'
             />
