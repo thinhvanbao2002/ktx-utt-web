@@ -15,6 +15,7 @@ export interface IAccount {
   avatar?: string
   status: string
   s?: string
+  role?: string
 }
 export interface IPayLoadListUser {
   page?: number

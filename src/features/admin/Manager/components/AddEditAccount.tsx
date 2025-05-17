@@ -19,7 +19,8 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     email: rowSelected?.email,
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
-    status: rowSelected?.s
+    status: rowSelected?.s,
+    role: rowSelected?.role || 'admin'
   }
 
   return (
@@ -87,6 +88,32 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
             <Input />
           </Form.Item>
         </Col>
+        <Col span={12}>
+          <Form.Item
+            name='role'
+            label='Vai trò'
+            rules={[
+              {
+                required: true,
+                message: 'Vai trò: Bắt buộc chọn'
+              }
+            ]}
+          >
+            <RadiusSelection
+              onChange={(value: string) => {
+                initialvalue.role = value
+              }}
+              defaultValue={'user'}
+              options={[
+                { value: 'admin', text: 'Quản trị viên' },
+                { value: 'student', text: 'Sinh viên' },
+              ]}
+              placeholder='Chọn vai trò'
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={24}>
         {!rowSelected && (
           <Col span={12}>
             <Form.Item

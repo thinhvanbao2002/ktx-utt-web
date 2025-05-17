@@ -10,8 +10,8 @@ const AdminDashBoard = lazy(() => import('../features/admin/AdminDashboard/admin
 const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx'))
 const CustomerPage = lazy(() => import('../features/admin/Customer/CustomerPage.tsx'))
 const CategoryPage = lazy(() => import('../features/admin/Building/BuildingPage.tsx'))
-const AdminProductPage = lazy(() => import('../features/admin/Product/ProductPage.tsx'))
-const AdminProductForm = lazy(() => import('../features/admin/Product/components/AddEditProduct.tsx'))
+const AdminProductPage = lazy(() => import('../features/admin/Room/RoomPage.tsx'))
+const AdminProductForm = lazy(() => import('../features/admin/Room/components/AddEditProduct.tsx'))
 const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
 const AddEditBlogPage = lazy(() => import('../features/admin/Blog/components/AddEditBlog.tsx'))
 const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'))
@@ -79,12 +79,12 @@ export const adminRoutes: Array<RouterProps> = [
     layout: AdminLayout
   },
   {
-    path: ADMIN_PATH.PRODUCT,
+    path: ADMIN_PATH.ROOM,
     component: AdminProductPage,
     layout: AdminLayout
   },
   {
-    path: ADMIN_PATH.CREATE_UPDATE_PRODUCT,
+    path: ADMIN_PATH.CREATE_UPDATE_ROOM,
     component: AdminProductForm,
     layout: AdminLayout
   },

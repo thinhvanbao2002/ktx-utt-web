@@ -16,7 +16,7 @@ function ManagerPage() {
   const [page, setPage] = useState<number>(1)
   const [payload, setPayload] = useState<IPayLoadListUser>({
     page: 1,
-    take: 5,
+    take: 12,
     q: '',
     status: '',
     to_date: '',

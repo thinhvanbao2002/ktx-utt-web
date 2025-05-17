@@ -1,23 +1,29 @@
-import { Button, Col, Form, Input, Row } from 'antd'
+import { Button, Col, Form, Input, Row, Select } from 'antd'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
 import { categoryServices } from 'features/admin/Building/BuildingApis'
 import { useEffect, useState } from 'react'
+const { Option } = Select
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { ProductTypes } from '../constants/product.constants'
-import UploadSingleFile from 'common/components/upload/UploadComponent'
+import { ProductTypes } from '../constants/room.constants'
 import UploadMultipart from 'common/components/upload/UploadMultipartComponent'
 import Config from 'common/constants/config'
 import { useLocation } from 'react-router'
 import { v4 as uuidv4 } from 'uuid'
 import { openNotification } from 'common/utils'
-import { productServices } from '../ProductApis'
-import { IProduct } from '../Product.props'
+import { productServices } from '../RoomApis'
+import { IProduct } from '../Room.props'
 import { useNavigate } from 'react-router-dom'
 import TextArea from 'antd/es/input/TextArea'
 import { ADMIN_PATH } from 'common/constants/paths'
+import { roomTypeServices } from 'features/admin/RoomType/RoomTypeApis'
+
+const devices = [
+  { id: 1, name: 'Máy lạnh' },
+  { id: 2, name: 'Máy chiếu' },
+  { id: 3, name: 'Đèn LED' }
+]
 
 const AddEditProduct = () => {
   const [form] = Form.useForm()
@@ -27,6 +33,7 @@ const AddEditProduct = () => {
     limit: 5
   })
   const [categoryListOptions, setCategoryListOptions] = useState<any>([])
+  const [roomTypeListOptions, setRoomTypeListOptions] = useState<any>([])
   const [images, setImages] = useState<Array<any>>([])
   const location = useLocation()
   const { state } = location || {}
@@ -81,8 +88,28 @@ const AddEditProduct = () => {
     }
   }
 
+  const handleGetRoomTypeListOptions = async (payload: any) => {
+    try {
+      const res = await roomTypeServices.get(payload)
+
+      console.log('🚀 ~ handleGetRoomTypeListOptions ~ res:', res)
+
+      setRoomTypeListOptions(
+        res.data.map((item: any) => {
+          return {
+            text: item?.name,
+            value: item?.id
+          }
+        })
+      )
+    } catch (error) {
+      console.log('🚀 ~ handleGetRoomTypeListOptions ~ error:', error)
+    }
+  }
+
   useEffect(() => {
     handleGetCategoryListOptions(payload)
+    handleGetRoomTypeListOptions(payload)
     // setImages(defaultFile)
     // form.setFieldsValue({ images: defaultFile })
   }, [payload])
@@ -112,10 +139,10 @@ const AddEditProduct = () => {
       if (res.status == 1) {
         if (record.id) {
           openNotification('success', 'Thành công', 'Cập nhật thành công')
-          navigate(`${ADMIN_PATH.PRODUCT}`)
+          navigate(`${ADMIN_PATH.ROOM}`)
         } else {
           openNotification('success', 'Thành công', 'Thêm mới thành công')
-          navigate(`${ADMIN_PATH.PRODUCT}`)
+          navigate(`${ADMIN_PATH.ROOM}`)
         }
       }
     } catch (error) {
@@ -135,71 +162,61 @@ const AddEditProduct = () => {
     >
       <Row gutter={24}>
         <Col span={8}>
-          <Form.Item name='product_code' label='Mã sản phẩm'>
-            <Input disabled placeholder='Mã sản phẩm tự động tạo' />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
           <Form.Item
-            name='name'
-            label='Tên sản phẩm'
+            name='room_number'
+            label='Mã phòng'
             rules={[
               {
                 required: true,
-                message: `Tên sản phẩm: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Mã phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
               }
             ]}
           >
             <Input />
           </Form.Item>
         </Col>
+
         <Col md={8}>
           <Form.Item
-            name={'category_id'}
-            label={'Danh mục'}
+            name={'room_type_id'}
+            label={'Loại phòng'}
             rules={[
               {
                 required: true,
-                message: `Danh mục: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Loại phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
               }
             ]}
           >
             <RadiusSelection
               showSearch={true}
               onSearch={(e) => onChangeSearchCategory(e)}
-              placeholder={'Danh mục'}
+              placeholder={'Loại phòng'}
+              options={roomTypeListOptions}
+            />
+          </Form.Item>
+        </Col>
+
+        <Col md={8}>
+          <Form.Item
+            name={'building_id'}
+            label={'Tòa nhà'}
+            rules={[
+              {
+                required: true,
+                message: `Tòa nhà: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+              }
+            ]}
+          >
+            <RadiusSelection
+              showSearch={true}
+              onSearch={(e) => onChangeSearchCategory(e)}
+              placeholder={'Tòa nhà'}
               options={categoryListOptions}
             />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={24}>
-        <Col md={8}>
-          <Form.Item
-            name={'product_type'}
-            label={'Loại hàng'}
-            rules={[
-              {
-                required: true,
-                message: `Loại hàng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
-              }
-            ]}
-          >
-            <RadiusSelection
-              placeholder={'Trạng thái hoạt động'}
-              // onChange={(value: number) => {
-              //   let tmpValue
-              //   value === undefined ? (tmpValue = null) : (tmpValue = value)
-              //   onChangeValue({ product_type: tmpValue })
-              // }}
-              options={[
-                { value: ProductTypes.BEST_SELLING, text: 'Hàng bán chạy' },
-                { value: ProductTypes.INVENTORY, text: 'Hàng tồn kho' },
-                { value: ProductTypes.NEW_PRODUCT, text: 'Hàng mới về' }
-              ]}
-            />
-          </Form.Item>
-        </Col>
         <Col span={8}>
           <Form.Item
             name='price'
@@ -215,20 +232,18 @@ const AddEditProduct = () => {
               }
             ]}
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name='quantity' label='Số lượng'>
-            <Input />
+          <Form.Item name='quantity' label='Số lượng sinh viên tối đa'>
+            <Input disabled />
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
         <Col span={8}>
           <Form.Item
             name='image'
-            label='Ảnh sản phẩm'
+            label='Danh sách thiết bị'
             rules={[
               {
                 required: true,
@@ -236,16 +251,23 @@ const AddEditProduct = () => {
               }
             ]}
           >
-            <UploadSingleFile
-              width='200px'
-              height='250px'
-              initialImage={record?.image}
-              onSuccessUpload={(imageUrl) => {
-                form.setFieldsValue({ image: imageUrl })
-              }}
-            />
+            <Select
+              mode='multiple'
+              allowClear
+              style={{ width: '100%' }}
+              placeholder='Chọn thiết bị'
+              onChange={(value) => console.log('Selected devices:', value)}
+            >
+              {devices.map((device) => (
+                <Option key={device.id} value={device.id}>
+                  {device.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
+      </Row>
+      <Row>
         <Col span={12} className='pl-[12px]'>
           <Form.Item name='product_photo' label='Ảnh chi tiết sản phẩm'>
             <UploadMultipart
@@ -271,20 +293,6 @@ const AddEditProduct = () => {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item name='introduce' label='Giới thiệu sản phẩm'>
-            <TextArea rows={4} placeholder='Nhập giới thiệu về sản phẩm' maxLength={2000} />
-          </Form.Item>
-        </Col>
-      </Row>
-      {/* <Row gutter={24}>
-        <Col span={24}>
-          <Form.Item name={'description'} label={'Mô tả sản phẩm'}>
-            <ReactQuill placeholder='Nhập mô tả sản phẩm' theme='snow' className='h-[350px]' />
-          </Form.Item>
-        </Col>
-      </Row> */}
       <Row gutter={24} className='mt-10'>
         <Col span={12}> </Col>
         <Col span={12} className='flex items-center justify-end'>

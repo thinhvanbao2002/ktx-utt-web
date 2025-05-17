@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { productServices } from '../product/productApis'
 import { formatPrice, openNotification, openNotificationError } from 'common/utils'
-import RelatedProducts from 'features/admin/Product/components/RelatedProducts'
+import RelatedProducts from 'features/admin/Room/components/RelatedProducts'
 import { USER_PATH } from 'common/constants/paths'
 import Comment from '../comment/Comment'
 

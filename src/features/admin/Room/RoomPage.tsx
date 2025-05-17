@@ -8,9 +8,9 @@ import { ShowConfirm } from 'common/components/Alert'
 import { Button, Row, Spin, Tag } from 'antd'
 import { Styled } from 'styles/stylesComponent'
 import { IColumnAntD } from 'common/constants/interface'
-import { IProduct } from './Product.props'
-import { getDataSource, openNotification } from 'common/utils'
-import { productServices } from './ProductApis'
+import { IProduct } from './Room.props'
+import { formatPrice, getDataSource, openNotification } from 'common/utils'
+import { productServices } from './RoomApis'
 import { useNavigate } from 'react-router-dom'
 import { ADMIN_PATH } from 'common/constants/paths'
 
@@ -19,7 +19,7 @@ function ProductPage() {
     page: 1,
     take: 10,
     q: '',
-    status: 1,
+    status: 'available',
     to_date: '',
     from_date: ''
   })
@@ -39,45 +39,67 @@ function ProductPage() {
       width: 20
     },
     {
-      title: 'Mã sản phẩm',
-      key: 'product_code',
-      dataIndex: 'product_code'
+      title: 'Số phòng',
+      key: 'room_number',
+      dataIndex: 'room_number'
     },
     {
-      title: 'Tên sản phẩm',
-      key: 'name',
-      dataIndex: 'name'
+      title: 'Tòa nhà',
+      key: 'building',
+      dataIndex: 'building',
+      render: (text, record) => record.building?.name ?? null
+    },
+    {
+      title: 'Loại phòng',
+      key: 'room_type',
+      dataIndex: 'room_type',
+      render: (text, record) => record.room_type?.name ?? null
+    },
+    {
+      title: 'Giá tiền (tháng)',
+      key: 'price',
+      dataIndex: 'price',
+      render: (text, record) => formatPrice(record.room_type?.price) ?? null
+    },
+    {
+      title: 'Số sinh viên hiện tại',
+      key: 'current_capacity',
+      dataIndex: 'current_capacity'
+    },
+    {
+      title: 'Số sinh viên tối đa',
+      key: 'room_type.max_student',
+      dataIndex: 'room_type.max_student',
+      render: (text, record) => record.room_type?.max_student ?? null
     },
     {
       title: 'Trạng thái',
       key: 'status',
       dataIndex: 'status',
-      render: (text, record) => (record.s === 1 ? <Tag color={'blue'}>{text}</Tag> : <Tag color={'red'}>{text}</Tag>)
-    },
-    {
-      title: 'Danh mục',
-      key: 'category',
-      dataIndex: 'category'
-    },
-    {
-      title: 'Giá tiền',
-      key: 'price',
-      dataIndex: 'price'
-    },
-    // {
-    //   title: 'Loại sản phẩm',
-    //   key: 'productType',
-    //   dataIndex: 'productType'
-    // },
-    {
-      title: 'Số lượng còn',
-      key: 'quantity',
-      dataIndex: 'quantity'
-    },
-    {
-      title: 'Số lượng đã bán',
-      key: 'sold',
-      dataIndex: 'sold'
+      render: (text, record) => {
+        let color = 'default'
+        let label = text
+
+        switch (record.s) {
+          case 'available':
+            color = 'blue'
+            label = 'Còn trống'
+            break
+          case 'full':
+            color = 'red'
+            label = 'Đầy'
+            break
+          case 'underMaintenance':
+            color = 'orange'
+            label = 'Bảo trì'
+            break
+          default:
+            color = 'default'
+            label = text
+        }
+
+        return <Tag color={color}>{label}</Tag>
+      }
     },
     {
       title: 'Ngày tạo',
@@ -144,7 +166,6 @@ function ProductPage() {
   const handleExportProduct = async (value: any) => {
     try {
       const res = await productServices.export(value)
-      console.log('🚀 ~ handleExportProduct ~ res:', res)
       if (res) {
         window.open(res?.data)
       }
@@ -189,7 +210,7 @@ function ProductPage() {
       if (!isNil(value?.categoryId)) {
         setPayload({
           ...payload,
-          brand: value?.categoryId
+          building_id: value?.categoryId
         })
       }
       if (!isNil(value.sortBy)) {
@@ -203,20 +224,41 @@ function ProductPage() {
   )
 
   const handleNavigateEditProduct = (record: any) => {
-    navigate('/ad-ce-product/', { state: { record: { ...record } } })
+    navigate('ce-room/', { state: { record: { ...record } } })
   }
 
   const handleNavigateAddProduct = () => {
-    navigate(ADMIN_PATH.CREATE_UPDATE_PRODUCT, { state: {} })
+    navigate(ADMIN_PATH.CREATE_UPDATE_ROOM, { state: {} })
   }
   return (
     <>
       <FilterProduct onChangeValue={handleFilterProduct} />
       <Row className='mb-2 flex justify-end mt-2'>
-        <Button type='primary' onClick={handleNavigateAddProduct}>
+        <Button
+          className='bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while'
+          onClick={handleNavigateAddProduct}
+        >
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary' onClick={() => handleExportProduct(payload)}>
+        <Button
+          className='bg-baseBackground 
+                    hover:!bg-hoverBase 
+                    text-while  
+                    border-none 
+                    shadow-none 
+                    hover:shadow-none
+                    hover:border-none 
+                    hover:!text-while ml-2'
+          type='primary'
+          onClick={() => handleExportProduct(payload)}
+        >
           Xuất Excel
         </Button>
       </Row>

@@ -33,7 +33,7 @@ const itemsMenu: MenuItem[] = [
   getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '2', <UserOutlined />),
   getItem('Kí túc xá', 'sub1', <UserOutlined />, [
     getItem(<Link to={ADMIN_PATH.BUILDING}>Tòa nhà</Link>, '4'),
-    getItem(<Link to={ADMIN_PATH.PRODUCT}>Phòng</Link>, '5'),
+    getItem(<Link to={ADMIN_PATH.ROOM}>Phòng</Link>, '5'),
     getItem(<Link to={ADMIN_PATH.ROOM_TYPE}>Loại phòng</Link>, '6'),
     getItem(<Link to={ADMIN_PATH.DEVICE}>Thiết bị</Link>, '7'),
     getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu thuê phòng</Link>, '8'),
@@ -97,8 +97,8 @@ const AdminLayout: React.FC = ({ children }: any) => {
       setKeySider('6')
     } else {
       switch (pathname) {
-        case ADMIN_PATH.PRODUCT:
-          setTitleHeader('Danh sách sản phẩm')
+        case ADMIN_PATH.ROOM:
+          setTitleHeader('Danh sách phòng kí túc')
           setKeySider('5')
           break
         case ADMIN_PATH.CREATE_UPDATE_PRODUCT:
