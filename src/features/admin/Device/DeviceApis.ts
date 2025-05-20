@@ -3,7 +3,7 @@ import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
 import { IDevice, IPayLoadLisCategory } from './Device.props'
 
-export const categoryServices = {
+export const deviceServices = {
   get: (params: IPayLoadLisCategory) => {
     const url = '/device'
     const handleParams = handleObjectEmpty(params)

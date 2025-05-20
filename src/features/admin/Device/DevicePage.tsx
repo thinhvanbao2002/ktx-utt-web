@@ -8,7 +8,7 @@ import { ShowConfirm } from 'common/components/Alert'
 import { Styled } from 'styles/stylesComponent'
 import ModalComponent from 'common/components/modal/Modal'
 import { IDevice, IPayLoadLisCategory } from './Device.props'
-import { categoryServices } from './DeviceApis'
+import { deviceServices } from './DeviceApis'
 import { getDataSource, openNotification } from 'common/utils'
 import { AddEditCategory } from './components/AddEditDevice'
 
@@ -95,7 +95,7 @@ function DevicePage() {
 
   const handleGetCategories = async (payload?: any) => {
     try {
-      const res = await categoryServices.get(payload)
+      const res = await deviceServices.get(payload)
       setCategory(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
@@ -144,9 +144,9 @@ function DevicePage() {
     console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     try {
       if (rowSelected?.id) {
-        res = await categoryServices.patch(payLoadAccount)
+        res = await deviceServices.patch(payLoadAccount)
       } else {
-        res = await categoryServices.post({ ...payLoadAccount })
+        res = await deviceServices.post({ ...payLoadAccount })
       }
 
       if (res.status == 1) {
@@ -176,7 +176,7 @@ function DevicePage() {
 
   const handleRemoveAccount = useCallback(async (record: any) => {
     try {
-      const res = await categoryServices.delete(record?.id)
+      const res = await deviceServices.delete(record?.id)
       if (res) {
         openNotification('success', 'Thành công', 'Xóa danh mục thành công')
         setIsLoading(true)

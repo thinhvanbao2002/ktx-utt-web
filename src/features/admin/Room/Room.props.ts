@@ -1,9 +1,9 @@
-export interface IProduct {
+export interface IRoom {
   id?: string
-  name: string
-  category_id: number
+  room_number: string
+  room_type_id: number
   price: number
-  product_type: number
+  building_id: number
   availability?: number
   status?: number
   number_of_review?: number
@@ -11,10 +11,12 @@ export interface IProduct {
   sold?: number
   description: string
   image: string
+  floor: number
   images: string
-  product_photo: []
+  room_photos: []
   introduce: string
   product_code?: string
+  device_ids?: []
 }
 
 export interface IPayLoadLisCategory {

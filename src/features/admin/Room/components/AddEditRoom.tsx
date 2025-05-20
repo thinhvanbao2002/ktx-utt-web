@@ -12,16 +12,11 @@ import { useLocation } from 'react-router'
 import { v4 as uuidv4 } from 'uuid'
 import { openNotification } from 'common/utils'
 import { productServices } from '../RoomApis'
-import { IProduct } from '../Room.props'
 import { useNavigate } from 'react-router-dom'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { roomTypeServices } from 'features/admin/RoomType/RoomTypeApis'
-
-const devices = [
-  { id: 1, name: 'Máy lạnh' },
-  { id: 2, name: 'Máy chiếu' },
-  { id: 3, name: 'Đèn LED' }
-]
+import { deviceServices } from 'features/admin/Device/DeviceApis'
+import { IRoom } from '../Room.props'
 
 const AddEditProduct = () => {
   const [form] = Form.useForm()
@@ -32,22 +27,27 @@ const AddEditProduct = () => {
   })
   const [categoryListOptions, setCategoryListOptions] = useState<any>([])
   const [roomTypeListOptions, setRoomTypeListOptions] = useState<any>([])
+  const [deviceListOptions, setDeviceListOptions] = useState<any>([])
   const [images, setImages] = useState<Array<any>>([])
+  const [devices, setDevices] = useState<Array<any>>([])
+  console.log('🚀 ~ AddEditProduct ~ devices:', devices)
   const location = useLocation()
   const { state } = location || {}
   const record = state?.record || {}
-  console.log('🚀 ~ AddEditProduct ~ record:', record)
 
   const initialValues = {
-    name: record?.name,
-    category_id: record?.category_id,
-    product_type: record?.product_type,
+    room_number: record?.room_number,
+    building_id: record?.building?.id,
+    room_type_id: record?.room_type?.id,
     product_code: record?.product_code,
-    price: record?.price,
+    price: record?.room_type?.price,
     quantity: record?.quantity,
     image: record?.image,
-    description: record?.description,
-    introduce: record?.introduce
+    devices: record?.room_devices?.map((item: any) => {
+      return item?.device?.id
+    }),
+    floor: record?.floor,
+    max_student: record?.room_type?.max_student
   }
 
   useEffect(() => {
@@ -90,9 +90,25 @@ const AddEditProduct = () => {
     try {
       const res = await roomTypeServices.get(payload)
 
-      console.log('🚀 ~ handleGetRoomTypeListOptions ~ res:', res)
-
       setRoomTypeListOptions(
+        res.data.map((item: any) => {
+          return {
+            text: item?.name,
+            value: item?.id
+          }
+        })
+      )
+    } catch (error) {
+      console.log('🚀 ~ handleGetRoomTypeListOptions ~ error:', error)
+    }
+  }
+
+  const handleGetDeviceListOptions = async (payload: any) => {
+    try {
+      const res = await deviceServices.get(payload)
+      console.log('🚀 ~ handleGetDeviceListOptions ~ res:', res)
+
+      setDeviceListOptions(
         res.data.map((item: any) => {
           return {
             text: item?.name,
@@ -108,31 +124,29 @@ const AddEditProduct = () => {
   useEffect(() => {
     handleGetCategoryListOptions(payload)
     handleGetRoomTypeListOptions(payload)
-    // setImages(defaultFile)
-    // form.setFieldsValue({ images: defaultFile })
+    handleGetDeviceListOptions(payload)
   }, [payload])
 
-  const handleSubmit = async (value: IProduct) => {
-    const payLoadAccount = {
+  const handleSubmit = async (value: IRoom) => {
+    const payLoadRoom = {
       id: record?.id,
-      name: value?.name,
-      category_id: value?.category_id,
-      price: value?.price,
-      product_type: value?.product_type,
+      room_number: value?.room_number,
+      room_type_id: value?.room_type_id,
+      building_id: value?.building_id,
       quantity: Number(value?.quantity),
-      description: value?.description,
       image: value?.image,
-      product_photo: value?.product_photo,
-      introduce: value?.introduce,
-      product_code: value?.product_code
+      room_photos: value?.room_photos,
+      floor: Number(value?.floor),
+      device_ids: devices
     }
-    console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
+
     let res
+
     try {
       if (record.id) {
-        res = await productServices.put(payLoadAccount)
+        res = await productServices.patch(payLoadRoom)
       } else {
-        res = await productServices.post(payLoadAccount)
+        res = await productServices.post(payLoadRoom)
       }
       if (res.status == 1) {
         if (record.id) {
@@ -170,7 +184,7 @@ const AddEditProduct = () => {
               }
             ]}
           >
-            <Input />
+            <Input placeholder='Nhập mã phòng' />
           </Form.Item>
         </Col>
 
@@ -217,35 +231,42 @@ const AddEditProduct = () => {
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item
-            name='price'
-            label='Giá tiền'
+            name='floor'
+            label='Tầng'
             rules={[
               {
                 required: true,
-                message: `Giá tiền: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Tầng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
               },
               {
                 pattern: Config._reg.number,
-                message: `Giá tiền: Phải là số`
+                message: `Tầng: Phải là số`
               }
             ]}
           >
+            <Input placeholder='Nhập tầng' />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item name='price' label='Giá tiền'>
             <Input disabled />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name='quantity' label='Số lượng sinh viên tối đa'>
+          <Form.Item name='max_student' label='Số lượng sinh viên tối đa'>
             <Input disabled />
           </Form.Item>
         </Col>
+      </Row>
+      <Row>
         <Col span={8}>
           <Form.Item
-            name='image'
+            name='devices'
             label='Danh sách thiết bị'
             rules={[
               {
                 required: true,
-                message: `Ảnh sản phẩm: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Thiết bị: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
               }
             ]}
           >
@@ -254,20 +275,21 @@ const AddEditProduct = () => {
               allowClear
               style={{ width: '100%' }}
               placeholder='Chọn thiết bị'
-              onChange={(value) => console.log('Selected devices:', value)}
+              onChange={(value) => {
+                setDevices(value)
+              }}
             >
-              {devices.map((device) => (
-                <Option key={device.id} value={device.id}>
-                  {device.name}
+              {deviceListOptions.map((device: any) => (
+                <Option key={device.value} value={device.value}>
+                  {device.text}
                 </Option>
               ))}
             </Select>
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
+
         <Col span={12} className='pl-[12px]'>
-          <Form.Item name='product_photo' label='Ảnh chi tiết sản phẩm'>
+          <Form.Item name='room_photos' label='Ảnh chi tiết sản phẩm'>
             <UploadMultipart
               defaultFileList={images}
               onFileListChange={(images) => {
@@ -285,7 +307,7 @@ const AddEditProduct = () => {
                     url: item.url
                   }
                 })
-                form.setFieldsValue({ product_photo: standardizationImage })
+                form.setFieldsValue({ room_photos: standardizationImage })
               }}
             />
           </Form.Item>
@@ -297,7 +319,7 @@ const AddEditProduct = () => {
           <Button
             danger
             onClick={() => {
-              navigate('/ad-product')
+              navigate('/room')
             }}
           >
             Thoát

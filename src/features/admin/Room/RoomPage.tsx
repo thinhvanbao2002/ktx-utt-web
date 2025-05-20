@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from 'react'
-import FilterProduct from './components/FilterProduct'
+import FilterProduct from './components/FilterRoom'
 import { isNil, values } from 'lodash'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
@@ -224,7 +224,7 @@ function ProductPage() {
   )
 
   const handleNavigateEditProduct = (record: any) => {
-    navigate('ce-room/', { state: { record: { ...record } } })
+    navigate('/ce-room/', { state: { record: { ...record } } })
   }
 
   const handleNavigateAddProduct = () => {

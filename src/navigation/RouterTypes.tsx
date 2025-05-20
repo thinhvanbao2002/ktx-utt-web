@@ -11,7 +11,7 @@ const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx
 const CustomerPage = lazy(() => import('../features/admin/Customer/CustomerPage.tsx'))
 const CategoryPage = lazy(() => import('../features/admin/Building/BuildingPage.tsx'))
 const AdminProductPage = lazy(() => import('../features/admin/Room/RoomPage.tsx'))
-const AdminProductForm = lazy(() => import('../features/admin/Room/components/AddEditProduct.tsx'))
+const AdminProductForm = lazy(() => import('../features/admin/Room/components/AddEditRoom.tsx'))
 const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
 const AddEditBlogPage = lazy(() => import('../features/admin/Blog/components/AddEditBlog.tsx'))
 const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'))

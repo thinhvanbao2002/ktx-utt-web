@@ -1,7 +1,7 @@
 import { handleObjectEmpty } from 'common/utils'
 import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
-import { IProduct } from './Room.props'
+import { IRoom } from './Room.props'
 
 export interface IQuery {
   page: number
@@ -15,15 +15,15 @@ export const productServices = {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
-  post: (value: IProduct) => {
+  post: (value: IRoom) => {
     const url = '/room'
     return AxiosClient.post(url, {
       ...value
     })
   },
-  put: (value: IProduct) => {
+  patch: (value: IRoom) => {
     const url = `/room/${value?.id}`
-    return AxiosClient.put(url, {
+    return AxiosClient.patch(url, {
       ...value
     })
   },
