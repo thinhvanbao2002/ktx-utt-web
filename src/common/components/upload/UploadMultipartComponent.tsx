@@ -46,6 +46,7 @@ const UploadMultipart: React.FC<UploadMultipartProps> = ({ defaultFileList = [],
   }, [defaultFileList])
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    console.log('🚀 ~ fileList:', fileList)
     setFileList(newFileList)
     if (onFileListChange) {
       onFileListChange(newFileList)
@@ -69,7 +70,7 @@ const UploadMultipart: React.FC<UploadMultipartProps> = ({ defaultFileList = [],
     fmData.append('image', file)
     try {
       const res: any = await AxiosClient.post(`uploads/image`, fmData, config)
-      onSuccess({ url: res?.data?.absoluteUrl })
+      onSuccess({ url: res?.data?.relativeUrl, fullUrl: res?.data?.absoluteUrl })
     } catch (error) {
       openNotificationError(error)
       onError(error)

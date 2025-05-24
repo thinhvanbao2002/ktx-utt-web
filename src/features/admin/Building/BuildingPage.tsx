@@ -103,7 +103,7 @@ function CategoryPage() {
   const handleGetCategories = async (payload?: any) => {
     try {
       const res = await categoryServices.get(payload)
-      setCategory(getDataSource(res?.data, 1))
+      setCategory(getDataSource(res.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)

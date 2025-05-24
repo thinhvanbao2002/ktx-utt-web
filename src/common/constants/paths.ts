@@ -13,7 +13,8 @@ export const ADMIN_PATH = {
   UPLOAD: '/upload',
   UPLOADS: '/upload-multipart',
   ROOM_TYPE: '/room-type',
-  DEVICE: '/device'
+  DEVICE: '/device',
+  VIEW_IMAGE: '/view-image'
 }
 
 export const USER_PATH = {

@@ -35,18 +35,25 @@ AxiosClient.interceptors.request.use(async (config: InternalAxiosRequestConfig) 
 
 AxiosClient.interceptors.response.use(
   (response: AxiosResponse) => {
+    const method = response.config.method?.toUpperCase()
+
     if (response && response.data) {
-      return response.data
+      if (method === 'GET') {
+        return response.data?.data // Chỉ trả về .data.data nếu là GET
+      }
+      return response.data // Các method khác trả về .data
     }
     return response
   },
   (error) => {
     console.log('🚀 ~ error:', error)
+
     if (error.status === 403) {
       window.location.href = `${ADMIN_PATH.LOGIN}`
       openNotificationError(error)
       LocalStorage.removeToken()
     }
+
     return Promise.reject(error)
   }
 )

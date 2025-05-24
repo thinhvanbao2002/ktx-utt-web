@@ -18,6 +18,7 @@ const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'
 const AdminEditOrder = lazy(() => import('../features/admin/Order/components/OrderDetail.tsx'))
 const RoomType = lazy(() => import('../features/admin/RoomType/RoomTypePage.tsx'))
 const DevicePage = lazy(() => import('../features/admin/Device/DevicePage.tsx'))
+const RoomImageView = lazy(() => import('../features/admin/Room/components/RoomImageView.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
@@ -117,6 +118,11 @@ export const adminRoutes: Array<RouterProps> = [
     path: ADMIN_PATH.DEVICE,
     component: DevicePage,
     layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.VIEW_IMAGE,
+    component: DevicePage,
+    layout: RoomImageView
   }
 ]
 

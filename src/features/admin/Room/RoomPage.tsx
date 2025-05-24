@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from 'react'
 import FilterProduct from './components/FilterRoom'
-import { isNil, values } from 'lodash'
+import { isNil } from 'lodash'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 import { Button, Row, Spin, Tag } from 'antd'
 import { Styled } from 'styles/stylesComponent'
 import { IColumnAntD } from 'common/constants/interface'
-import { IProduct } from './Room.props'
 import { formatPrice, getDataSource, openNotification } from 'common/utils'
 import { productServices } from './RoomApis'
 import { useNavigate } from 'react-router-dom'
 import { ADMIN_PATH } from 'common/constants/paths'
+import { IRoom } from './Room.props'
+import ModalComponent from 'common/components/modal/Modal'
 
 function ProductPage() {
   const [payload, setPayload] = useState<any>({
@@ -23,11 +24,8 @@ function ProductPage() {
     to_date: '',
     from_date: ''
   })
-  console.log('🚀 ~ ProductPage ~ payload:', payload)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [title, setTitle] = useState<string>('')
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
-  const [products, setProducts] = useState<Array<IProduct>>([])
+  const [products, setProducts] = useState<Array<IRoom>>([])
   const [count, setCount] = useState<number>(12)
   const navigate = useNavigate()
 
@@ -115,25 +113,38 @@ function ProductPage() {
         return (
           <div style={{ display: 'flex' }}>
             <TooltipCustom
-              title={'Cập nhật'}
+              title='Xem chi tiết'
               children={
                 <Button
-                  type={'text'}
-                  className={'btn-success-text'}
+                  type='text'
+                  className='btn-view-text'
+                  icon={<EyeOutlined />}
+                  onClick={() => handleNavigateImageView(record)}
+                />
+              }
+            />
+
+            <TooltipCustom
+              title='Cập nhật'
+              children={
+                <Button
+                  type='text'
+                  className='btn-success-text'
                   icon={<EditOutlined />}
                   onClick={() => handleNavigateEditProduct(record)}
                 />
               }
             />
+
             <ShowConfirm
               placement='bottomLeft'
               onConfirm={() => handleRemoveAccount(record)}
-              confirmText={'Xóa'}
-              title={'Bạn có chắc chắn muốn xóa?'}
+              confirmText='Xóa'
+              title='Bạn có chắc chắn muốn xóa?'
             >
               <TooltipCustom
                 title='Xóa'
-                children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+                children={<Button type='text' className='btn-delete-text' icon={<DeleteOutlined />} />}
               />
             </ShowConfirm>
           </div>
@@ -225,6 +236,10 @@ function ProductPage() {
 
   const handleNavigateEditProduct = (record: any) => {
     navigate('/ce-room/', { state: { record: { ...record } } })
+  }
+
+  const handleNavigateImageView = (record: any) => {
+    navigate('/view-image', { state: { record: { ...record } } })
   }
 
   const handleNavigateAddProduct = () => {

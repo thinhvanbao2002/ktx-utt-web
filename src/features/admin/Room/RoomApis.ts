@@ -28,12 +28,12 @@ export const productServices = {
     })
   },
   delete: (id: number) => {
-    const url = `/a/product/${id}`
+    const url = `/room/${id}`
     return AxiosClient.delete(url)
   },
   export: (value: IQuery) => {
     console.log('🚀 ~ value:', value)
-    const url = '/a/product/export'
+    const url = '/room/ export'
     const handleParams = handleObjectEmpty(value)
     return AxiosClient.post(url, {
       ...handleParams,

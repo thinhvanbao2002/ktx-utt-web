@@ -5,9 +5,9 @@ export interface IQuery {
 }
 
 export const adminDashboardServices = {
-  get: () => {
-    const url = '/overview'
-    return AxiosClient.get(url)
+  post: () => {
+    const url = '/admin-dashboard'
+    return AxiosClient.post(url)
   },
   getRevenueByYear: (year: number) => {
     const url = `/overview/revenue/${year}`

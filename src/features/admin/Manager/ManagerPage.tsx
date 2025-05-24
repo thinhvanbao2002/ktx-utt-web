@@ -169,6 +169,8 @@ function ManagerPage() {
         res = await accountServices.post({ ...payLoadAccount, password: value?.password, status: 'active' })
       }
 
+      console.log('🚀 ~ handleSubmit ~ res:', res)
+
       if (res.status == 1) {
         if (rowSelected) {
           console.log('1')

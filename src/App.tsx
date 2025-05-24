@@ -14,7 +14,7 @@ function App() {
     try {
       const res = await authService.getUserInfo()
       if (res) {
-        dispatch(setLogin(res?.data))
+        dispatch(setLogin(res))
       }
     } catch (error) {
       openNotificationError(error)

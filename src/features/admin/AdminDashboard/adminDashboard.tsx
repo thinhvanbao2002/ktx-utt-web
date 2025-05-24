@@ -8,7 +8,7 @@ function AdminDashboardScreen() {
 
   const getAdminDashboarData = useCallback(async () => {
     try {
-      const res = await adminDashboardServices.get()
+      const res = await adminDashboardServices.post()
       if (res) {
         setAdminDashboardData({ ...res?.data })
       }
@@ -26,13 +26,13 @@ function AdminDashboardScreen() {
         <div className='w-[20%] h-[100px] shadow-block rounded-md bg-baseBackground flex items-center justify-center  '>
           <div className='text-center'>
             <div>Sinh viên</div>
-            <div className='font-semibold text-custom-xl'>100</div>
+            <div className='font-semibold text-custom-xl'>{formatPrice(adminDashboardData.student)}</div>
           </div>
         </div>
         <div className='w-[20%] h-[100px] shadow-block rounded-md bg-baseBackground flex items-center justify-center  '>
           <div className='text-center'>
             <div>Phòng</div>
-            <div className='font-semibold text-custom-xl'>{formatPrice(adminDashboardData.countProducts)}</div>
+            <div className='font-semibold text-custom-xl'>{formatPrice(adminDashboardData.room)}</div>
           </div>
         </div>
         <div className='w-[20%] h-[100px] shadow-block rounded-md bg-baseBackground flex items-center justify-center  '>

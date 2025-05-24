@@ -1,22 +1,47 @@
 export interface IRoom {
-  id?: string
+  id?: number
   room_number: string
   room_type_id: number
-  price: number
   building_id: number
-  availability?: number
-  status?: number
-  number_of_review?: number
-  quantity?: number
-  sold?: number
-  description: string
-  image: string
+  quantity: number
+  image?: string
+  room_photos?: Array<{
+    uid: string
+    name: string
+    url: string
+  }>
   floor: number
-  images: string
-  room_photos: []
-  introduce: string
-  product_code?: string
-  device_ids?: []
+  devices?: number[]
+  price?: number
+  max_student?: number
+}
+
+export interface IRoomResponse {
+  id: number
+  room_number: string
+  room_type: {
+    id: number
+    name: string
+    price: number
+    max_student: number
+  }
+  building: {
+    id: number
+    name: string
+  }
+  quantity: number
+  image: string
+  room_photos: Array<{
+    id: number
+    full_url: string
+  }>
+  floor: number
+  room_devices: Array<{
+    device: {
+      id: number
+      name: string
+    }
+  }>
 }
 
 export interface IPayLoadLisCategory {

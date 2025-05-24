@@ -1,171 +1,71 @@
 import { Button, Col, Form, Input, Row, Select } from 'antd'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
-import { categoryServices } from 'features/admin/Building/BuildingApis'
-import { useEffect, useState } from 'react'
-const { Option } = Select
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import 'react-quill/dist/quill.snow.css'
 import UploadMultipart from 'common/components/upload/UploadMultipartComponent'
 import Config from 'common/constants/config'
-import { useLocation } from 'react-router'
-import { v4 as uuidv4 } from 'uuid'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { openNotification } from 'common/utils'
 import { productServices } from '../RoomApis'
-import { useNavigate } from 'react-router-dom'
 import { ADMIN_PATH } from 'common/constants/paths'
-import { roomTypeServices } from 'features/admin/RoomType/RoomTypeApis'
-import { deviceServices } from 'features/admin/Device/DeviceApis'
-import { IRoom } from '../Room.props'
+import { IRoom, IRoomResponse } from '../Room.props'
+import { useRoomImages } from '../hooks/useRoomImages'
+import { useRoomOptions } from '../hooks/useRoomOptions'
 
-const AddEditProduct = () => {
+const { Option } = Select
+
+const AddEditRoom = () => {
   const [form] = Form.useForm()
   const navigate = useNavigate()
-  const [payload, setPayload] = useState<any>({
-    q: '',
-    limit: 5
-  })
-  const [categoryListOptions, setCategoryListOptions] = useState<any>([])
-  const [roomTypeListOptions, setRoomTypeListOptions] = useState<any>([])
-  const [deviceListOptions, setDeviceListOptions] = useState<any>([])
-  const [images, setImages] = useState<Array<any>>([])
-  const [devices, setDevices] = useState<Array<any>>([])
-  console.log('🚀 ~ AddEditProduct ~ devices:', devices)
   const location = useLocation()
   const { state } = location || {}
-  const record = state?.record || {}
+  const record = (state?.record || {}) as IRoomResponse
 
-  const initialValues = {
+  const { categoryListOptions, roomTypeListOptions, deviceListOptions, handleSearch } = useRoomOptions()
+
+  const { images, handleImagesChange } = useRoomImages({ record, form })
+
+  const initialValues: Partial<IRoom> = {
     room_number: record?.room_number,
     building_id: record?.building?.id,
     room_type_id: record?.room_type?.id,
-    product_code: record?.product_code,
     price: record?.room_type?.price,
     quantity: record?.quantity,
     image: record?.image,
-    devices: record?.room_devices?.map((item: any) => {
-      return item?.device?.id
-    }),
+    devices: record?.room_devices?.map((item) => item?.device?.id),
     floor: record?.floor,
     max_student: record?.room_type?.max_student
   }
 
-  useEffect(() => {
-    if (record && record.product_photo && record.product_photo.length) {
-      const convertProductPhoto = record?.product_photo.map((p: any) => {
-        return {
-          uid: uuidv4(),
-          name: uuidv4(),
-          url: p?.url
-        }
-      })
-      setImages(convertProductPhoto)
-      form.setFieldsValue({ product_photo: convertProductPhoto })
-    }
-  }, [])
-
-  const onChangeSearchCategory = async (value: any) => {
-    setPayload({
-      q: value
-    })
-  }
-
-  const handleGetCategoryListOptions = async (payload: any) => {
+  const handleSubmit = async (values: IRoom) => {
     try {
-      const res = await categoryServices.get(payload)
-      setCategoryListOptions(
-        res.data.map((item: any) => {
-          return {
-            text: item?.name,
-            value: item?.id
-          }
-        })
-      )
-    } catch (error) {
-      console.log('🚀 ~ handleGetCategoryListOptions ~ error:', error)
-    }
-  }
-
-  const handleGetRoomTypeListOptions = async (payload: any) => {
-    try {
-      const res = await roomTypeServices.get(payload)
-
-      setRoomTypeListOptions(
-        res.data.map((item: any) => {
-          return {
-            text: item?.name,
-            value: item?.id
-          }
-        })
-      )
-    } catch (error) {
-      console.log('🚀 ~ handleGetRoomTypeListOptions ~ error:', error)
-    }
-  }
-
-  const handleGetDeviceListOptions = async (payload: any) => {
-    try {
-      const res = await deviceServices.get(payload)
-      console.log('🚀 ~ handleGetDeviceListOptions ~ res:', res)
-
-      setDeviceListOptions(
-        res.data.map((item: any) => {
-          return {
-            text: item?.name,
-            value: item?.id
-          }
-        })
-      )
-    } catch (error) {
-      console.log('🚀 ~ handleGetRoomTypeListOptions ~ error:', error)
-    }
-  }
-
-  useEffect(() => {
-    handleGetCategoryListOptions(payload)
-    handleGetRoomTypeListOptions(payload)
-    handleGetDeviceListOptions(payload)
-  }, [payload])
-
-  const handleSubmit = async (value: IRoom) => {
-    const payLoadRoom = {
-      id: record?.id,
-      room_number: value?.room_number,
-      room_type_id: value?.room_type_id,
-      building_id: value?.building_id,
-      quantity: Number(value?.quantity),
-      image: value?.image,
-      room_photos: value?.room_photos,
-      floor: Number(value?.floor),
-      device_ids: devices
-    }
-
-    let res
-
-    try {
-      if (record.id) {
-        res = await productServices.patch(payLoadRoom)
-      } else {
-        res = await productServices.post(payLoadRoom)
+      const payload: IRoom = {
+        id: record?.id,
+        room_number: values.room_number,
+        room_type_id: values.room_type_id,
+        building_id: values.building_id,
+        quantity: Number(values.quantity),
+        image: values.image,
+        room_photos: values.room_photos,
+        floor: Number(values.floor),
+        devices: values.devices
       }
-      if (res.status == 1) {
-        if (record.id) {
-          openNotification('success', 'Thành công', 'Cập nhật thành công')
-          navigate(`${ADMIN_PATH.ROOM}`)
-        } else {
-          openNotification('success', 'Thành công', 'Thêm mới thành công')
-          navigate(`${ADMIN_PATH.ROOM}`)
-        }
+
+      const res = record.id ? await productServices.patch(payload) : await productServices.post(payload)
+
+      if (res.status) {
+        openNotification('success', 'Thành công', record.id ? 'Cập nhật thành công' : 'Thêm mới thành công')
+        navigate(ADMIN_PATH.ROOM)
       }
     } catch (error) {
-      console.log('🚀 ~ handleSubmit ~ error:', error)
+      console.error('Error submitting room:', error)
+      openNotification('error', 'Lỗi', 'Có lỗi xảy ra khi lưu thông tin phòng')
     }
   }
 
   return (
     <Form
       form={form}
-      name='addAddEditProduct'
+      name='addEditRoom'
       labelAlign='left'
       scrollToFirstError
       layout='vertical'
@@ -180,7 +80,7 @@ const AddEditProduct = () => {
             rules={[
               {
                 required: true,
-                message: `Mã phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Mã phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY}`
               }
             ]}
           >
@@ -190,19 +90,19 @@ const AddEditProduct = () => {
 
         <Col md={8}>
           <Form.Item
-            name={'room_type_id'}
-            label={'Loại phòng'}
+            name='room_type_id'
+            label='Loại phòng'
             rules={[
               {
                 required: true,
-                message: `Loại phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Loại phòng: ${TEXT_CONSTANTS.IS_NOT_EMPTY}`
               }
             ]}
           >
             <RadiusSelection
-              showSearch={true}
-              onSearch={(e) => onChangeSearchCategory(e)}
-              placeholder={'Loại phòng'}
+              showSearch
+              onSearch={handleSearch}
+              placeholder='Loại phòng'
               options={roomTypeListOptions}
             />
           </Form.Item>
@@ -210,24 +110,20 @@ const AddEditProduct = () => {
 
         <Col md={8}>
           <Form.Item
-            name={'building_id'}
-            label={'Tòa nhà'}
+            name='building_id'
+            label='Tòa nhà'
             rules={[
               {
                 required: true,
-                message: `Tòa nhà: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Tòa nhà: ${TEXT_CONSTANTS.IS_NOT_EMPTY}`
               }
             ]}
           >
-            <RadiusSelection
-              showSearch={true}
-              onSearch={(e) => onChangeSearchCategory(e)}
-              placeholder={'Tòa nhà'}
-              options={categoryListOptions}
-            />
+            <RadiusSelection showSearch onSearch={handleSearch} placeholder='Tòa nhà' options={categoryListOptions} />
           </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item
@@ -236,11 +132,11 @@ const AddEditProduct = () => {
             rules={[
               {
                 required: true,
-                message: `Tầng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Tầng: ${TEXT_CONSTANTS.IS_NOT_EMPTY}`
               },
               {
                 pattern: Config._reg.number,
-                message: `Tầng: Phải là số`
+                message: 'Tầng: Phải là số'
               }
             ]}
           >
@@ -258,6 +154,7 @@ const AddEditProduct = () => {
           </Form.Item>
         </Col>
       </Row>
+
       <Row>
         <Col span={8}>
           <Form.Item
@@ -266,20 +163,12 @@ const AddEditProduct = () => {
             rules={[
               {
                 required: true,
-                message: `Thiết bị: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                message: `Thiết bị: ${TEXT_CONSTANTS.IS_NOT_EMPTY}`
               }
             ]}
           >
-            <Select
-              mode='multiple'
-              allowClear
-              style={{ width: '100%' }}
-              placeholder='Chọn thiết bị'
-              onChange={(value) => {
-                setDevices(value)
-              }}
-            >
-              {deviceListOptions.map((device: any) => (
+            <Select mode='multiple' allowClear style={{ width: '100%' }} placeholder='Chọn thiết bị'>
+              {deviceListOptions.map((device) => (
                 <Option key={device.value} value={device.value}>
                   {device.text}
                 </Option>
@@ -289,39 +178,16 @@ const AddEditProduct = () => {
         </Col>
 
         <Col span={12} className='pl-[12px]'>
-          <Form.Item name='room_photos' label='Ảnh chi tiết sản phẩm'>
-            <UploadMultipart
-              defaultFileList={images}
-              onFileListChange={(images) => {
-                const standardizationImage = images.map((item: any) => {
-                  if (item?.response?.url) {
-                    return {
-                      uid: item?.uid,
-                      name: item?.name,
-                      url: item?.response.url
-                    }
-                  }
-                  return {
-                    uid: item?.uid,
-                    name: item?.name,
-                    url: item.url
-                  }
-                })
-                form.setFieldsValue({ room_photos: standardizationImage })
-              }}
-            />
+          <Form.Item name='room_photos' label='Ảnh chi tiết phòng'>
+            <UploadMultipart defaultFileList={images} onFileListChange={handleImagesChange} />
           </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={24} className='mt-10'>
-        <Col span={12}> </Col>
+        <Col span={12} />
         <Col span={12} className='flex items-center justify-end'>
-          <Button
-            danger
-            onClick={() => {
-              navigate('/room')
-            }}
-          >
+          <Button danger onClick={() => navigate(ADMIN_PATH.ROOM)}>
             Thoát
           </Button>
           <Button htmlType='submit' className='btn-confirm' style={{ marginLeft: '10px' }}>
@@ -333,4 +199,4 @@ const AddEditProduct = () => {
   )
 }
 
-export default AddEditProduct
+export default AddEditRoom

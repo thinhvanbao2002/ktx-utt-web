@@ -28,6 +28,27 @@ function getItem(
   } as MenuItem
 }
 
+const rolePermissions = {
+  admin: ['1', '2', '4', '5', '6', '7', '8', '9', '10'],
+  student: ['1', '5', '6', '8']
+}
+
+const filterMenuByRole = (items: MenuItem[], allowedKeys: string[]): MenuItem[] => {
+  return items
+    .filter((item: any) => allowedKeys.includes(item.key as string) || item.children)
+    .map((item: any) => {
+      if (item.children) {
+        const filteredChildren = item.children.filter((child: any) => allowedKeys.includes(child.key as string))
+        if (filteredChildren.length > 0) {
+          return { ...item, children: filteredChildren }
+        }
+        return null
+      }
+      return item
+    })
+    .filter(Boolean) // loại bỏ null
+}
+
 const itemsMenu: MenuItem[] = [
   getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <PieChartOutlined />),
   getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '2', <UserOutlined />),
@@ -51,7 +72,11 @@ const AdminLayout: React.FC = ({ children }: any) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const userData = useSelector((state: any) => state.login)
-  console.log('🚀 ~ userData:', userData)
+  const role = userData?.user?.role as keyof typeof rolePermissions
+
+  const allowedKeys = rolePermissions[role] || []
+
+  const filteredMenu = filterMenuByRole(itemsMenu, allowedKeys)
 
   const {
     token: { colorBgContainer }
@@ -101,7 +126,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setTitleHeader('Danh sách phòng kí túc')
           setKeySider('5')
           break
-        case ADMIN_PATH.CREATE_UPDATE_PRODUCT:
+        case ADMIN_PATH.CREATE_UPDATE_ROOM:
           setTitleHeader('Thêm mới/Cập nhật sản phẩm')
           setKeySider('5')
           break
@@ -146,7 +171,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
         <div className='w-full flex justify-center'>
           <img src='/logo-utt-2.png' className='w-[100px] mt-3' />
         </div>
-        <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
+        <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={filteredMenu} />
       </Sider>
       <Layout>
         <Header style={{ background: colorBgContainer }} className='flex items-center justify-between pr-4 pl-4'>
