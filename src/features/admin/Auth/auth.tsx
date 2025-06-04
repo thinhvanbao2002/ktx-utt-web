@@ -22,18 +22,13 @@ function LoginAdminPage() {
       })
       .then((res: any) => {
         if (res.status) {
-          if (res?.data?.role === 'admin') {
-            LocalStorage.setToken(res?.data?.token)
-            LocalStorage.setData(res?.data?.id)
-            LocalStorage.setRole(res?.data?.role)
-            setIsLoading(false)
-            openNotification('success', 'Thành công!', 'Đăng nhập thành công.')
-            navigate(ADMIN_PATH.OVERVIEW)
-            dispatch(setLogin(res?.data))
-          } else {
-            openNotification('warning', 'Thất bại!', 'Không có quyền truy cập.')
-            setIsLoading(false)
-          }
+          LocalStorage.setToken(res?.data?.token)
+          LocalStorage.setData(res?.data?.id)
+          LocalStorage.setRole(res?.data?.role)
+          setIsLoading(false)
+          openNotification('success', 'Thành công!', 'Đăng nhập thành công.')
+          navigate(ADMIN_PATH.OVERVIEW)
+          dispatch(setLogin(res?.data))
         }
       })
       .catch((err) => {

@@ -46,7 +46,7 @@ const filterMenuByRole = (items: MenuItem[], allowedKeys: string[]): MenuItem[] 
       }
       return item
     })
-    .filter(Boolean) // loại bỏ null
+    .filter(Boolean)
 }
 
 const itemsMenu: MenuItem[] = [
@@ -57,11 +57,12 @@ const itemsMenu: MenuItem[] = [
     getItem(<Link to={ADMIN_PATH.ROOM}>Phòng</Link>, '5'),
     getItem(<Link to={ADMIN_PATH.ROOM_TYPE}>Loại phòng</Link>, '6'),
     getItem(<Link to={ADMIN_PATH.DEVICE}>Thiết bị</Link>, '7'),
-    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu thuê phòng</Link>, '8'),
-    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu hỗ trợ</Link>, '9')
+    getItem(<Link to={ADMIN_PATH.RENTAL_LIST}>Yêu cầu thuê phòng</Link>, '8'),
+    getItem(<Link to={ADMIN_PATH.RENTAL_DETAIL}>Phòng thuê</Link>, '9'),
+    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu hỗ trợ</Link>, '10')
   ]),
   getItem('Cấu hình', 'sub2', <SettingOutlined />, [
-    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '10', <BookOutlined />)
+    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '11', <BookOutlined />)
   ])
 ]
 
@@ -157,6 +158,14 @@ const AdminLayout: React.FC = ({ children }: any) => {
         case ADMIN_PATH.DEVICE:
           setTitleHeader('Thiết bị')
           setKeySider('7')
+          break
+        case ADMIN_PATH.RENTAL_DETAIL:
+          setTitleHeader('Thông tin phòng thuê')
+          setKeySider('9')
+          break
+        case ADMIN_PATH.RENTAL_LIST:
+          setTitleHeader('Yêu cầu thuê phòng')
+          setKeySider('8')
           break
 
         default:

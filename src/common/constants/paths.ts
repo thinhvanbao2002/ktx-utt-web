@@ -14,7 +14,11 @@ export const ADMIN_PATH = {
   UPLOADS: '/upload-multipart',
   ROOM_TYPE: '/room-type',
   DEVICE: '/device',
-  VIEW_IMAGE: '/view-image'
+  VIEW_IMAGE: '/view-image',
+  REN_ROOM: '/rental/request',
+  RENTAL_LIST: '/rental',
+  RENTAL_MY_REQUEST: '/rental/my-request',
+  RENTAL_DETAIL: '/rental/detail'
 }
 
 export const USER_PATH = {
@@ -26,5 +30,6 @@ export const USER_PATH = {
   ORDER: '/order',
   ORDER_SUCCESS: '/order/success',
   ORDER_HISTORY: '/order/history',
-  BLOG: '/blog'
+  BLOG: '/blog',
+  MY_RENTAL: '/my-rental'
 }

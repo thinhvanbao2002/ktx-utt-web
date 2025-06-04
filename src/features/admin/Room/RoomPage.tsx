@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import FilterProduct from './components/FilterRoom'
 import { isNil } from 'lodash'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
-import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined, HomeOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 import { Button, Row, Spin, Tag } from 'antd'
 import { Styled } from 'styles/stylesComponent'
@@ -62,7 +62,8 @@ function ProductPage() {
     {
       title: 'Số sinh viên hiện tại',
       key: 'current_capacity',
-      dataIndex: 'current_capacity'
+      dataIndex: 'current_capacity',
+      render: (text, record) => record.room_students?.length ?? null
     },
     {
       title: 'Số sinh viên tối đa',
@@ -120,6 +121,18 @@ function ProductPage() {
                   className='btn-view-text'
                   icon={<EyeOutlined />}
                   onClick={() => handleNavigateImageView(record)}
+                />
+              }
+            />
+
+            <TooltipCustom
+              title='Thuê phòng'
+              children={
+                <Button
+                  type='text'
+                  className='btn-rent-text'
+                  icon={<HomeOutlined />}
+                  onClick={() => handleRentRoom(record)}
                 />
               }
             />
@@ -238,8 +251,12 @@ function ProductPage() {
     navigate('/ce-room/', { state: { record: { ...record } } })
   }
 
+  const handleRentRoom = (room: IRoom) => {
+    navigate(`${ADMIN_PATH.REN_ROOM}/${room.id}`)
+  }
+
   const handleNavigateImageView = (record: any) => {
-    navigate('/view-image', { state: { record: { ...record } } })
+    navigate(`/view-image/${record.id}`)
   }
 
   const handleNavigateAddProduct = () => {

@@ -16,6 +16,7 @@ export interface IAccount {
   status: string
   s?: string
   role?: string
+  cccd_code?: string
 }
 export interface IPayLoadListUser {
   page?: number

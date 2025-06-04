@@ -15,6 +15,10 @@ export const productServices = {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
+  getById: (id: number) => {
+    const url = `/room/${id}`
+    return AxiosClient.get(url)
+  },
   post: (value: IRoom) => {
     const url = '/room'
     return AxiosClient.post(url, {

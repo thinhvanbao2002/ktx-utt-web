@@ -159,7 +159,10 @@ function ManagerPage() {
       phone: value?.phone,
       email: value?.email,
       status: value?.status || null,
-      avatar: value?.avatar
+      avatar: value?.avatar,
+      cccd_code: value?.cccd_code,
+      class_code: value?.class_code,
+      student_code: value?.student_code
     }
     let res
     try {

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Select } from 'antd'
+import { Button, Col, Form, Input, Row, Select, Table } from 'antd'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
 import UploadMultipart from 'common/components/upload/UploadMultipartComponent'
@@ -12,6 +12,29 @@ import { useRoomImages } from '../hooks/useRoomImages'
 import { useRoomOptions } from '../hooks/useRoomOptions'
 
 const { Option } = Select
+
+const studentColumns = [
+  {
+    title: 'Họ tên',
+    dataIndex: ['user', 'name'],
+    key: 'name'
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: ['user', 'phone'],
+    key: 'phone'
+  },
+  {
+    title: 'Email',
+    dataIndex: ['user', 'email'],
+    key: 'email'
+  },
+  {
+    title: 'Vai trò',
+    dataIndex: ['user', 'role'],
+    key: 'role'
+  }
+]
 
 const AddEditRoom = () => {
   const [form] = Form.useForm()
@@ -183,6 +206,21 @@ const AddEditRoom = () => {
           </Form.Item>
         </Col>
       </Row>
+
+      {record?.id && (
+        <Row gutter={24} className='mb-6'>
+          <Col span={24}>
+            <h3 className='font-semibold text-lg mb-2'>Danh sách sinh viên trong phòng</h3>
+            <Table
+              bordered
+              columns={studentColumns}
+              dataSource={record?.room_students || []}
+              rowKey={(record) => record.id}
+              pagination={false}
+            />
+          </Col>
+        </Row>
+      )}
 
       <Row gutter={24} className='mt-10'>
         <Col span={12} />

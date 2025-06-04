@@ -20,7 +20,8 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
     status: rowSelected?.s,
-    role: rowSelected?.role || 'admin'
+    role: rowSelected?.role || 'admin',
+    cccd_code: rowSelected?.cccd_code
   }
 
   return (
@@ -160,20 +161,51 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
             </Form.Item>
           </Col>
         )}
-      </Row>
-      {/* <Row gutter={24}>
         <Col span={12}>
-          <Form.Item name='avatar' label='Ảnh đại diện'>
-            <UploadSingleFile
-              initialImage={initialvalue.avatar}
-              onSuccessUpload={(imageUrl) => {
-                console.log('🚀 ~ AddEditManager ~ imageUrl:', imageUrl)
-                form.setFieldsValue({ avatar: imageUrl })
-              }}
-            />
+          <Form.Item
+            name='cccd_code'
+            label='cccd_code'
+            rules={[
+              {
+                required: true,
+                message: `Mã căn cước: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+              }
+            ]}
+          >
+            <Input type='cccd_code' />
           </Form.Item>
         </Col>
-      </Row> */}
+      </Row>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name='class_code'
+            label='Mã lớp'
+            rules={[
+              {
+                required: true,
+                message: `Mã cước: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+              }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name='student_code'
+            label='Mã sinh viên'
+            rules={[
+              {
+                required: true,
+                message: `Mã sinh viên: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+              }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Row gutter={24}>
         <Col span={12}> </Col>

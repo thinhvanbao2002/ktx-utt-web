@@ -19,6 +19,9 @@ const AdminEditOrder = lazy(() => import('../features/admin/Order/components/Ord
 const RoomType = lazy(() => import('../features/admin/RoomType/RoomTypePage.tsx'))
 const DevicePage = lazy(() => import('../features/admin/Device/DevicePage.tsx'))
 const RoomImageView = lazy(() => import('../features/admin/Room/components/RoomImageView.tsx'))
+const RentalList = lazy(() => import('../features/admin/Rental/pages/RentalListPage'))
+const RenRoom = lazy(() => import('../features/admin/Rental/pages/RentalRequestPage'))
+const RentalDetailPage = lazy(() => import('../features/admin/Rental/pages/RentalDetailPage'))
 
 //User
 const HomePage = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
@@ -35,6 +38,7 @@ const OrderSuccess = lazy(() => import('../features/customer/successOrder/Succes
 const OrderHistory = lazy(() => import('../features/customer/order/OrderHistory.tsx'))
 const BlogPage = lazy(() => import('../features/customer/blog/BlogPage.tsx'))
 const BlogDetail = lazy(() => import('../features/customer/blog/BlogDetail.tsx'))
+const MyRentalPage = lazy(() => import('../features/customer/rental/MyRentalPage'))
 
 interface RouterProps {
   path: string
@@ -120,9 +124,24 @@ export const adminRoutes: Array<RouterProps> = [
     layout: AdminLayout
   },
   {
-    path: ADMIN_PATH.VIEW_IMAGE,
-    component: DevicePage,
-    layout: RoomImageView
+    path: `${ADMIN_PATH.VIEW_IMAGE}/:id`,
+    component: RoomImageView,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.RENTAL_LIST,
+    component: RentalList,
+    layout: AdminLayout
+  },
+  {
+    path: `${ADMIN_PATH.REN_ROOM}/:id`,
+    component: RenRoom,
+    layout: AdminLayout
+  },
+  {
+    path: `${ADMIN_PATH.RENTAL_DETAIL}/:id`,
+    component: RentalDetailPage,
+    layout: AdminLayout
   }
 ]
 
@@ -130,6 +149,11 @@ export const userRoutes: Array<RouterProps> = [
   {
     path: USER_PATH.ORDER_SUCCESS,
     component: OrderSuccess
+  },
+  {
+    path: USER_PATH.MY_RENTAL,
+    component: MyRentalPage,
+    layout: UserLayout
   }
 ]
 

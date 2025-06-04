@@ -14,6 +14,14 @@ export interface IRoom {
   devices?: number[]
   price?: number
   max_student?: number
+  room_students?: Array<{
+    user: {
+      id: number
+      name: string
+      phone: string
+      email: string
+    }
+  }>
 }
 
 export interface IRoomResponse {
@@ -36,6 +44,14 @@ export interface IRoomResponse {
     full_url: string
   }>
   floor: number
+  room_students: Array<{
+    user: {
+      id: number
+      name: string
+      phone: string
+      email: string
+    }
+  }>
   room_devices: Array<{
     device: {
       id: number
