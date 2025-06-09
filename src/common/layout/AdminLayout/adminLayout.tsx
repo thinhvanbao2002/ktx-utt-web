@@ -29,8 +29,8 @@ function getItem(
 }
 
 const rolePermissions = {
-  admin: ['1', '2', '4', '5', '6', '7', '8', '9', '10'],
-  student: ['1', '5', '6', '8']
+  admin: ['1', '2', '4', '5', '6', '7', '8', '10'],
+  student: ['1', '5', '8']
 }
 
 const filterMenuByRole = (items: MenuItem[], allowedKeys: string[]): MenuItem[] => {
@@ -57,8 +57,8 @@ const itemsMenu: MenuItem[] = [
     getItem(<Link to={ADMIN_PATH.ROOM}>Phòng</Link>, '5'),
     getItem(<Link to={ADMIN_PATH.ROOM_TYPE}>Loại phòng</Link>, '6'),
     getItem(<Link to={ADMIN_PATH.DEVICE}>Thiết bị</Link>, '7'),
-    getItem(<Link to={ADMIN_PATH.RENTAL_LIST}>Yêu cầu thuê phòng</Link>, '8'),
-    getItem(<Link to={ADMIN_PATH.RENTAL_DETAIL}>Phòng thuê</Link>, '9'),
+    getItem(<Link to={ADMIN_PATH.RENTAL_LIST}>Hợp đồng thuê phòng</Link>, '8'),
+    getItem(<Link to={ADMIN_PATH.RENTAL_DETAIL}>Phòng của tôi</Link>, '9'),
     getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu hỗ trợ</Link>, '10')
   ]),
   getItem('Cấu hình', 'sub2', <SettingOutlined />, [
@@ -148,7 +148,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setKeySider('6')
           break
         case ADMIN_PATH.OVERVIEW:
-          setTitleHeader('Thống kê báo cáo')
+          setTitleHeader('Tổng quan')
           setKeySider('1')
           break
         case ADMIN_PATH.ROOM_TYPE:
@@ -164,7 +164,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setKeySider('9')
           break
         case ADMIN_PATH.RENTAL_LIST:
-          setTitleHeader('Yêu cầu thuê phòng')
+          setTitleHeader('Hợp đồng thuê phòng')
           setKeySider('8')
           break
 

@@ -17,6 +17,8 @@ export interface IAccount {
   s?: string
   role?: string
   cccd_code?: string
+  class_code?: string
+  student_code?: string
 }
 export interface IPayLoadListUser {
   page?: number

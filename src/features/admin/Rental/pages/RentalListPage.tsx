@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from 'react'
-import { Button, Row, Spin, Tag } from 'antd'
+import { Button, Row, Spin, Tag, Space } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { Styled } from 'styles/stylesComponent'
 import { IColumnAntD } from 'common/constants/interface'
@@ -69,6 +69,7 @@ function RentalListPage() {
       key: 's',
       dataIndex: 's',
       render: (text) => {
+        console.log('🚀 ~ RentalListPage ~ text:', text)
         let color = 'default'
         let label = text
 
@@ -91,20 +92,26 @@ function RentalListPage() {
             break
           case RentRoomStatus.COMPLETED:
             color = 'success'
-            label = 'Hoàn thành'
+            label = 'Đã kí hợp đồng'
+            break
+          case RentRoomStatus.TERMINATED:
+            color = 'error'
+            label = 'Đã kết thúc'
             break
           default:
             color = 'default'
             label = text
         }
 
+        console.log('LABEL')
+
         return <Tag color={color}>{label}</Tag>
       }
     },
     {
       title: 'Ngày tạo',
-      key: 'created_at',
-      dataIndex: 'created_at'
+      key: 'createdAt',
+      dataIndex: 'createdAt'
     },
     {
       width: 80,
@@ -182,6 +189,44 @@ function RentalListPage() {
 
   const handleNavigateEdit = (record: any) => {
     navigate(`${ADMIN_PATH.RENTAL_DETAIL}/${record.id}`)
+  }
+
+  const getStatusText = (status: RentRoomStatus) => {
+    switch (status) {
+      case RentRoomStatus.DRAFT:
+        return 'Dự thảo'
+      case RentRoomStatus.WAITING_FOR_CONFIRMATION:
+        return 'Chờ phê duyệt'
+      case RentRoomStatus.CONFIRMED:
+        return 'Đã phê duyệt'
+      case RentRoomStatus.CONTRACT_SIGNED:
+        return 'Chờ ký hợp đồng'
+      case RentRoomStatus.COMPLETED:
+        return 'Hoàn thành'
+      case RentRoomStatus.TERMINATED:
+        return 'Đã kết thúc'
+      default:
+        return status
+    }
+  }
+
+  const getStatusColor = (status: RentRoomStatus) => {
+    switch (status) {
+      case RentRoomStatus.DRAFT:
+        return 'default'
+      case RentRoomStatus.WAITING_FOR_CONFIRMATION:
+        return 'processing'
+      case RentRoomStatus.CONFIRMED:
+        return 'warning'
+      case RentRoomStatus.CONTRACT_SIGNED:
+        return 'warning'
+      case RentRoomStatus.COMPLETED:
+        return 'success'
+      case RentRoomStatus.TERMINATED:
+        return 'error'
+      default:
+        return 'default'
+    }
   }
 
   useEffect(() => {

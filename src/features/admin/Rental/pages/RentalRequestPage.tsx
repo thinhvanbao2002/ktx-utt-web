@@ -22,7 +22,7 @@ const RentalRequestPage = () => {
     { title: 'Chờ phê duyệt', status: RentRoomStatus.WAITING_FOR_CONFIRMATION },
     { title: 'Đã phê duyệt', status: RentRoomStatus.CONFIRMED },
     { title: 'Chờ ký hợp đồng', status: RentRoomStatus.CONTRACT_SIGNED },
-    { title: 'Hoàn thành', status: RentRoomStatus.COMPLETED }
+    { title: 'Đã kí hợp đồng', status: RentRoomStatus.COMPLETED }
   ]
 
   useEffect(() => {

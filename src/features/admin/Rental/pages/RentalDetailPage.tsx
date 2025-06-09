@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Card, Form, Input, DatePicker, Steps, message, Row, Col } from 'antd'
+import { Button, Card, Form, Input, DatePicker, Steps, message, Row, Col, Modal } from 'antd'
 import { useAuth } from 'hooks/useAuth'
 import { RentRoomStatus } from 'types/rental'
 import { rentalServices } from '../RentalApis'
@@ -23,7 +23,8 @@ const RentalDetailPage = () => {
     { title: 'Chờ phê duyệt', status: RentRoomStatus.WAITING_FOR_CONFIRMATION },
     { title: 'Đã phê duyệt', status: RentRoomStatus.CONFIRMED },
     { title: 'Chờ ký hợp đồng', status: RentRoomStatus.CONTRACT_SIGNED },
-    { title: 'Hoàn thành', status: RentRoomStatus.COMPLETED }
+    { title: 'Hoàn thành', status: RentRoomStatus.COMPLETED },
+    { title: 'Đã kết thúc', status: RentRoomStatus.TERMINATED }
   ]
 
   useEffect(() => {
@@ -73,7 +74,8 @@ const RentalDetailPage = () => {
       // Gọi API trigger workflow
       await rentalServices.triggerWorkflow({
         action,
-        ren_room_id: Number(id)
+        ren_room_id: Number(id),
+        room_id: form.getFieldValue('room_id')
       })
 
       // Refresh lại dữ liệu
@@ -98,7 +100,8 @@ const RentalDetailPage = () => {
       setIsLoading(true)
       await rentalServices.triggerWorkflow({
         action: RentRoomStatus.COMPLETED,
-        ren_room_id: Number(id)
+        ren_room_id: Number(id),
+        room_id: form.getFieldValue('room_id')
       })
       await handleGetRoomById(Number(id))
       message.success('Ký hợp đồng thành công')
@@ -108,6 +111,34 @@ const RentalDetailPage = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleEndContract = async () => {
+    Modal.confirm({
+      title: 'Xác nhận kết thúc hợp đồng',
+      content: 'Bạn có chắc chắn muốn kết thúc hợp đồng này? Hành động này không thể hoàn tác.',
+      okText: 'Xác nhận',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        try {
+          setIsLoading(true)
+          const endDate = form.getFieldValue('contract_end_date')
+          await rentalServices.endContract({
+            ren_room_id: Number(id),
+            room_id: form.getFieldValue('room_id'),
+            end_date: endDate.format('YYYY-MM-DD')
+          })
+          await handleGetRoomById(Number(id))
+          message.success('Kết thúc hợp đồng thành công')
+        } catch (error) {
+          console.log('🚀 ~ handleEndContract ~ error:', error)
+          message.error('Kết thúc hợp đồng thất bại')
+        } finally {
+          setIsLoading(false)
+        }
+      }
+    })
   }
 
   const handleGetRoomById = async (id: number) => {
@@ -182,7 +213,18 @@ const RentalDetailPage = () => {
       case RentRoomStatus.COMPLETED:
         return (
           <>
+            {user?.role === 'admin' && currentStatus === RentRoomStatus.COMPLETED && (
+              <Button type='primary' danger onClick={handleEndContract}>
+                Kết thúc hợp đồng
+              </Button>
+            )}
             <Button onClick={() => form.resetFields()}>Cập nhật</Button>
+            <Button onClick={() => navigate(-1)}>Thoát</Button>
+          </>
+        )
+      case RentRoomStatus.TERMINATED:
+        return (
+          <>
             <Button onClick={() => navigate(-1)}>Thoát</Button>
           </>
         )

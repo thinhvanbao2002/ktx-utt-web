@@ -3,7 +3,8 @@ export enum RentRoomStatus {
   WAITING_FOR_CONFIRMATION = 'waitingForConfirmation',
   CONFIRMED = 'confirmed',
   CONTRACT_SIGNED = 'contractSigned',
-  COMPLETED = 'completed'
+  COMPLETED = 'completed',
+  TERMINATED = 'terminated'
 }
 
 export interface IRentalRequest {

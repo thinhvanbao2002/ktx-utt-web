@@ -162,7 +162,8 @@ function ManagerPage() {
       avatar: value?.avatar,
       cccd_code: value?.cccd_code,
       class_code: value?.class_code,
-      student_code: value?.student_code
+      student_code: value?.student_code,
+      role: value?.role
     }
     let res
     try {

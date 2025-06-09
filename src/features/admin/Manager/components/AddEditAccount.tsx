@@ -21,7 +21,9 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     avatar: rowSelected?.avatar,
     status: rowSelected?.s,
     role: rowSelected?.role || 'admin',
-    cccd_code: rowSelected?.cccd_code
+    cccd_code: rowSelected?.cccd_code,
+    class_code: rowSelected?.class_code,
+    student_code: rowSelected?.student_code
   }
 
   return (
@@ -162,46 +164,19 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
           </Col>
         )}
         <Col span={12}>
-          <Form.Item
-            name='cccd_code'
-            label='cccd_code'
-            rules={[
-              {
-                required: true,
-                message: `Mã căn cước: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
-              }
-            ]}
-          >
+          <Form.Item name='cccd_code' label='Mã căn cước'>
             <Input type='cccd_code' />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={24}>
         <Col span={12}>
-          <Form.Item
-            name='class_code'
-            label='Mã lớp'
-            rules={[
-              {
-                required: true,
-                message: `Mã cước: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
-              }
-            ]}
-          >
+          <Form.Item name='class_code' label='Mã lớp'>
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            name='student_code'
-            label='Mã sinh viên'
-            rules={[
-              {
-                required: true,
-                message: `Mã sinh viên: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
-              }
-            ]}
-          >
+          <Form.Item name='student_code' label='Mã sinh viên'>
             <Input />
           </Form.Item>
         </Col>

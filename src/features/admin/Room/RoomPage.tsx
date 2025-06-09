@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { IRoom } from './Room.props'
 import ModalComponent from 'common/components/modal/Modal'
+import { useAuth } from 'hooks/useAuth'
 
 function ProductPage() {
   const [payload, setPayload] = useState<any>({
@@ -28,6 +29,8 @@ function ProductPage() {
   const [products, setProducts] = useState<Array<IRoom>>([])
   const [count, setCount] = useState<number>(12)
   const navigate = useNavigate()
+  const { user } = useAuth()
+  console.log('🚀 ~ ProductPage ~ user:', user)
 
   const columnsListCategory: IColumnAntD[] = [
     {
@@ -137,29 +140,33 @@ function ProductPage() {
               }
             />
 
-            <TooltipCustom
-              title='Cập nhật'
-              children={
-                <Button
-                  type='text'
-                  className='btn-success-text'
-                  icon={<EditOutlined />}
-                  onClick={() => handleNavigateEditProduct(record)}
-                />
-              }
-            />
-
-            <ShowConfirm
-              placement='bottomLeft'
-              onConfirm={() => handleRemoveAccount(record)}
-              confirmText='Xóa'
-              title='Bạn có chắc chắn muốn xóa?'
-            >
+            {user?.role === 'admin' && (
               <TooltipCustom
-                title='Xóa'
-                children={<Button type='text' className='btn-delete-text' icon={<DeleteOutlined />} />}
+                title='Cập nhật'
+                children={
+                  <Button
+                    type='text'
+                    className='btn-success-text'
+                    icon={<EditOutlined />}
+                    onClick={() => handleNavigateEditProduct(record)}
+                  />
+                }
               />
-            </ShowConfirm>
+            )}
+
+            {user?.role === 'admin' && (
+              <ShowConfirm
+                placement='bottomLeft'
+                onConfirm={() => handleRemoveAccount(record)}
+                confirmText='Xóa'
+                title='Bạn có chắc chắn muốn xóa?'
+              >
+                <TooltipCustom
+                  title='Xóa'
+                  children={<Button type='text' className='btn-delete-text' icon={<DeleteOutlined />} />}
+                />
+              </ShowConfirm>
+            )}
           </div>
         )
       }

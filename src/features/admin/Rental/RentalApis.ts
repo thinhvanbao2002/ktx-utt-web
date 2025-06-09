@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AxiosResponse } from 'axios'
-import { IQuery } from 'common/constants'
+import { IQuery } from '../AdminDashboard/adminDashboardApis'
 import { RentRoomStatus } from 'types/rental'
 import { AxiosClient } from 'apis/axiosClient'
 import { API_URL } from 'common/constants'
-import { IQuery } from '../AdminDashboard/adminDashboardApis'
 import { handleObjectEmpty } from 'common/utils'
 import { RECORD_SIZE } from 'common/config'
 
@@ -44,7 +43,11 @@ export const rentalServices = {
     return AxiosClient.delete(`${API_URL}/rentals/${id}`)
   },
 
-  triggerWorkflow: (data: { action: RentRoomStatus; ren_room_id: number }) => {
+  triggerWorkflow: (data: { action: RentRoomStatus; ren_room_id: number; room_id: any }) => {
     return AxiosClient.post(`/rent-rooms/trigger-workflow`, data)
+  },
+
+  endContract: (data: { ren_room_id: number; room_id: number; end_date: string }) => {
+    return AxiosClient.post(`/rent-rooms/end-contract`, data)
   }
 }
