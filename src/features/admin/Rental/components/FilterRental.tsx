@@ -36,8 +36,8 @@ const FilterRental = ({ onChangeValue }: FilterRentalProps) => {
                   { value: RentRoomStatus.DRAFT, label: 'Dự thảo' },
                   { value: RentRoomStatus.WAITING_FOR_CONFIRMATION, label: 'Chờ phê duyệt' },
                   { value: RentRoomStatus.CONFIRMED, label: 'Đã phê duyệt' },
-                  { value: RentRoomStatus.CONTRACT_SIGNED, label: 'Đã ký hợp đồng' },
-                  { value: RentRoomStatus.COMPLETED, label: 'Hoàn thành' }
+                  { value: RentRoomStatus.CONTRACT_SIGNED, label: 'Chờ ký hợp đồng' },
+                  { value: RentRoomStatus.COMPLETED, label: 'Đã kí hợp đồng' }
                 ]}
               />
             </Form.Item>
@@ -52,7 +52,11 @@ const FilterRental = ({ onChangeValue }: FilterRentalProps) => {
           <Col span={8}></Col>
           <Col span={8}></Col>
           <Col span={8} style={{ textAlign: 'right' }}>
-            <Button type='primary' htmlType='submit' className='mr-2'>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className='bg-baseBackground hover:!bg-hoverBase text-while border-none shadow-none hover:shadow-none hover:border-none hover:!text-while mr-2'
+            >
               Tìm kiếm
             </Button>
             <Button onClick={handleReset}>Reset</Button>

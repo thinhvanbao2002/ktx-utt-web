@@ -22,11 +22,13 @@ function RegisterPage() {
     }
   }
   return (
-    <div className='w-full h-screen flex items-center justify-center'>
-      <div className='w-[500px] shadow-custom-lg rounded-xl p-4'>
-        <div className='mt-10'>
-          <img className='w-[150px] mx-auto' src='/LOGO-WEBSHOP.jpg' alt='' />
-          <h3 className='text-custom-xl text-center'>Đăng kí tài khoản</h3>
+    <div className='w-full h-screen flex items-center justify-center bg-gray-50'>
+      <div className='w-[500px] max-h-[90vh] shadow-custom-lg rounded-xl p-4 bg-white overflow-y-auto'>
+        <div className='py-6'>
+          <div className='mb-6'>
+            <img className='w-[400px] mx-auto' src='/logoUTT.png' alt='' />
+            <h3 className='text-custom-xl text-center mt-4'>Đăng kí tài khoản</h3>
+          </div>
           <Form layout='vertical' form={form}>
             <Form.Item
               label='Họ và tên'
@@ -36,7 +38,7 @@ function RegisterPage() {
                 { pattern: Config._reg.name, message: 'Họ và tên không hợp lệ!' }
               ]}
             >
-              <Input className='h-12' placeholder='Tài khoản của bạn...' />
+              <Input className='h-12' placeholder='Nhập họ và tên...' />
             </Form.Item>
 
             <Form.Item
@@ -48,7 +50,7 @@ function RegisterPage() {
                 { pattern: Config._reg.phone, message: 'Số điện thoại không hợp lệ!' }
               ]}
             >
-              <Input className='h-12' placeholder='Tài khoản của bạn...' />
+              <Input className='h-12' placeholder='Nhập số điện thoại...' />
             </Form.Item>
 
             <Form.Item
@@ -60,7 +62,37 @@ function RegisterPage() {
                 { pattern: Config._reg.email, message: 'Email không hợp lệ!' }
               ]}
             >
-              <Input className='h-12' placeholder='Email của bạn...' />
+              <Input className='h-12' placeholder='Nhập email...' />
+            </Form.Item>
+
+            <Form.Item
+              label='Mã CCCD'
+              className='mt-5'
+              name='cccd_code'
+              rules={[
+                { required: true, message: 'Vui lòng nhập mã CCCD!' },
+                { pattern: /^[0-9]{12}$/, message: 'Mã CCCD phải có 12 số!' }
+              ]}
+            >
+              <Input className='h-12' placeholder='Nhập mã CCCD...' />
+            </Form.Item>
+
+            <Form.Item
+              label='Mã lớp'
+              className='mt-5'
+              name='class_code'
+              rules={[{ required: true, message: 'Vui lòng nhập mã lớp!' }]}
+            >
+              <Input className='h-12' placeholder='Nhập mã lớp...' />
+            </Form.Item>
+
+            <Form.Item
+              label='Mã sinh viên'
+              className='mt-5'
+              name='student_code'
+              rules={[{ required: true, message: 'Vui lòng nhập mã sinh viên!' }]}
+            >
+              <Input className='h-12' placeholder='Nhập mã sinh viên...' />
             </Form.Item>
 
             <Form.Item
@@ -73,7 +105,7 @@ function RegisterPage() {
               ]}
               hasFeedback
             >
-              <Input.Password className='h-12' placeholder='Mật khẩu của bạn...' />
+              <Input.Password className='h-12' placeholder='Nhập mật khẩu...' />
             </Form.Item>
 
             <Form.Item
@@ -99,7 +131,7 @@ function RegisterPage() {
 
             <Form.Item>
               <Button
-                className='bg-black hover:bg-gray-700 mt-5 w-full'
+                className='bg-black hover:bg-gray-700 mt-5 w-full h-12'
                 type='primary'
                 htmlType='submit'
                 onClick={handleSubmit}
@@ -107,6 +139,14 @@ function RegisterPage() {
                 Đăng kí
               </Button>
             </Form.Item>
+            <div className='text-center mt-4'>
+              <p className='text-gray-600'>
+                Đã có tài khoản?{' '}
+                <a href={USER_PATH.LOGIN} className='text-blue-600 hover:text-blue-800 font-medium'>
+                  Đăng nhập tại đây
+                </a>
+              </p>
+            </div>
           </Form>
         </div>
       </div>

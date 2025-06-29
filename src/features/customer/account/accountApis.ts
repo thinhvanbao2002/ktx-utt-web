@@ -9,7 +9,7 @@ export const accountServices = {
     })
   },
   register: (payload: any) => {
-    const url = `/user/register`
+    const url = `/auth/register`
     return AxiosClient.post(url, { ...payload })
   }
 }

@@ -1,105 +1,102 @@
-import { Button, Form, Input, Spin } from 'antd'
-import { useState } from 'react'
-import { authService } from './services/Apis'
-import LocalStorage from 'apis/localStorage'
-import { openNotification, openNotificationError } from 'common/utils'
+import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router'
-import { ADMIN_PATH } from 'common/constants/paths'
+import { ADMIN_PATH, USER_PATH } from 'common/constants/paths'
+import { authService } from './services/Apis'
+import { openNotification, openNotificationError } from 'common/utils'
+import { useState } from 'react'
+import LocalStorage from 'apis/localStorage'
 import { useDispatch } from 'react-redux'
 import { setLogin } from 'redux/slice/login.slice'
 
-function LoginAdminPage() {
+function AdminLoginPage() {
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (value: any) => {
-    setIsLoading(true)
-    authService
-      .login({
-        phone: value?.phone,
-        password: value?.password
-      })
-      .then((res: any) => {
-        if (res.status) {
-          LocalStorage.setToken(res?.data?.token)
-          LocalStorage.setData(res?.data?.id)
-          LocalStorage.setRole(res?.data?.role)
-          setIsLoading(false)
-          openNotification('success', 'Thành công!', 'Đăng nhập thành công.')
-          navigate(ADMIN_PATH.OVERVIEW)
-          dispatch(setLogin(res?.data))
-        }
-      })
-      .catch((err) => {
-        openNotificationError(err)
-        setIsLoading(false)
-      })
+  const handleSubmit = async (values: any) => {
+    console.log(values) // Phải ra { username: '...', password: '...' }
+    try {
+      setIsLoading(true)
+      const res = await authService.login(values)
+
+      console.log('errr', res)
+
+      if (res.status) {
+        LocalStorage.setToken(res?.data?.token)
+        LocalStorage.setData(res?.data?.id)
+        LocalStorage.setRole(res?.data?.role)
+        dispatch(setLogin(res?.data))
+        openNotification('success', 'Thành công', 'Đăng nhập thành công')
+        navigate(ADMIN_PATH.OVERVIEW)
+      }
+    } catch (error) {
+      openNotificationError(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <>
-      <div className='w-full h-screen flex items-center justify-center'>
-        <Spin spinning={isLoading} className='w-full h-full !max-h-none'>
-          <div className='w-[600px] h-[600px] shadow-custom-lg rounded-xl p-4'>
-            <div>
-              <img className='w-full mx-auto mt-10' src='/logoUTT.png' alt='' />
-              <Form onFinish={handleSubmit} layout='vertical'>
-                <Form.Item
-                  label='Số điện thoại'
-                  className='mt-10 '
-                  name='phone'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập số điện thoại!'
-                    },
-                    {
-                      pattern: /^[0-9]{10}$/,
-                      message: 'Số điện thoại không hợp lệ!'
-                    }
-                  ]}
-                >
-                  <Input className='h-12' placeholder='Tài khoản của bạn...' />
-                </Form.Item>
-                <Form.Item
-                  label='Mật khẩu'
-                  className='mt-10'
-                  name='password'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập mật khẩu!'
-                    }
-                  ]}
-                >
-                  <Input placeholder='Mật khẩu của bạn...' className='h-12' />
-                </Form.Item>
-                <Form.Item>
-                  <Button
-                    className='
-                    text-while
-                    bg-baseBackground 
-                    hover:!bg-hoverBase 
-                    border-none 
-                    shadow-none 
-                    hover:shadow-none
-                    hover:border-none 
-                    hover:!text-while
-                    mt-5 w-full h-[50px] 
-                    text-custom-sm'
-                    htmlType='submit'
-                  >
-                    Gửi
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
+    <div className='w-full h-screen flex items-center justify-center bg-gray-50'>
+      <div className='w-[500px] max-h-[90vh] shadow-custom-lg rounded-xl p-4 bg-white overflow-y-auto'>
+        <div className='py-6'>
+          <div className='mb-6'>
+            <img className='w-[400px] mx-auto' src='/logoUTT.png' alt='' />
           </div>
-        </Spin>
+          <Form onFinish={handleSubmit} layout='vertical'>
+            <Form.Item
+              label='Số điện thoại'
+              className='mt-5'
+              name='phone'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập số điện thoại!'
+                },
+                {
+                  pattern: /^[0-9]{10}$/,
+                  message: 'Số điện thoại không hợp lệ!'
+                }
+              ]}
+            >
+              <Input className='h-12' placeholder='Nhập số điện thoại...' />
+            </Form.Item>
+            <Form.Item
+              label='Mật khẩu'
+              className='mt-5'
+              name='password'
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu!'
+                }
+              ]}
+            >
+              <Input.Password className='h-12' placeholder='Nhập mật khẩu...' />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                className='bg-black hover:bg-gray-700 mt-5 w-full h-12'
+                type='primary'
+                htmlType='submit'
+                loading={isLoading}
+              >
+                Đăng nhập
+              </Button>
+            </Form.Item>
+            <div className='text-center mt-4'>
+              <p className='text-gray-600'>
+                Bạn là sinh viên?{' '}
+                <a href={USER_PATH.REGISTER} className='text-blue-600 hover:text-blue-800 font-medium'>
+                  Đăng ký tại đây
+                </a>
+              </p>
+            </div>
+          </Form>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
 
-export default LoginAdminPage
+export default AdminLoginPage

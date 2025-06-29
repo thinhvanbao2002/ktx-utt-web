@@ -163,26 +163,22 @@ function RentalListPage() {
 
   const handleFilterRental = useCallback(
     (value: any) => {
-      if (value?.status) {
-        setPayload({
-          ...payload,
-          status: value?.status,
-          page: 1
-        })
+      const newPayload = { ...payload }
+      if (value?.status !== undefined) {
+        newPayload.status = value.status
+        newPayload.page = 1
       }
       if (value?.date) {
-        setPayload({
-          ...payload,
-          from_date: value?.date.split(',')[0],
-          to_date: value?.date.split(',')[1]
-        })
+        const [from, to] = value.date
+        newPayload.from_date = from ? from.format('YYYY-MM-DD') : ''
+        newPayload.to_date = to ? to.format('YYYY-MM-DD') : ''
+        newPayload.page = 1
       }
-      if (value?.search) {
-        setPayload({
-          ...payload,
-          q: value?.search
-        })
+      if (value?.search !== undefined) {
+        newPayload.q = value.search
+        newPayload.page = 1
       }
+      setPayload(newPayload)
     },
     [payload]
   )

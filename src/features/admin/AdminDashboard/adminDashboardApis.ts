@@ -12,5 +12,9 @@ export const adminDashboardServices = {
   getRevenueByYear: (year: number) => {
     const url = `/overview/revenue/${year}`
     return AxiosClient.get(url)
+  },
+  getStudentRegisterStatistics: (year: number) => {
+    const url = `/admin-dashboard/student-register-statistics?year=${year}`
+    return AxiosClient.get(url)
   }
 }
