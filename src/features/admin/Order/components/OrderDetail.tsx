@@ -5,7 +5,7 @@ import { Styled } from 'styles/stylesComponent'
 import { Button, Col, Image, Row } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { orderServices } from '../OrderApis'
+import { orderServices } from '../IncidentReportApis'
 import { formatPrice, getDataSource, openNotificationError } from 'common/utils'
 import { OrderStatus } from '../constants/order.constant'
 

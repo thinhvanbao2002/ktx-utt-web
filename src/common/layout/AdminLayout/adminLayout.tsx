@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { PieChartOutlined, UserOutlined, LogoutOutlined, SettingOutlined, BookOutlined } from '@ant-design/icons'
+import {
+  PieChartOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+  BookOutlined,
+  HomeOutlined
+} from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
@@ -29,8 +36,8 @@ function getItem(
 }
 
 const rolePermissions = {
-  admin: ['1', '2', '4', '5', '6', '7', '8', '10'],
-  student: ['1', '5', '8']
+  admin: ['1', '2', '4', '5', '6', '7', '8', '10', '12'],
+  student: ['1', '5', '8', '10']
 }
 
 const filterMenuByRole = (items: MenuItem[], allowedKeys: string[]): MenuItem[] => {
@@ -52,14 +59,15 @@ const filterMenuByRole = (items: MenuItem[], allowedKeys: string[]): MenuItem[] 
 const itemsMenu: MenuItem[] = [
   getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <PieChartOutlined />),
   getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '2', <UserOutlined />),
-  getItem('Kí túc xá', 'sub1', <UserOutlined />, [
+  getItem(<Link to={ADMIN_PATH.STUDENT}>Sinh viên</Link>, '12', <UserOutlined />),
+  getItem('Kí túc xá', 'sub1', <HomeOutlined />, [
     getItem(<Link to={ADMIN_PATH.BUILDING}>Tòa nhà</Link>, '4'),
     getItem(<Link to={ADMIN_PATH.ROOM}>Phòng</Link>, '5'),
     getItem(<Link to={ADMIN_PATH.ROOM_TYPE}>Loại phòng</Link>, '6'),
     getItem(<Link to={ADMIN_PATH.DEVICE}>Thiết bị</Link>, '7'),
     getItem(<Link to={ADMIN_PATH.RENTAL_LIST}>Hợp đồng thuê phòng</Link>, '8'),
     getItem(<Link to={ADMIN_PATH.RENTAL_DETAIL}>Phòng của tôi</Link>, '9'),
-    getItem(<Link to={ADMIN_PATH.ORDER}>Yêu cầu hỗ trợ</Link>, '10')
+    getItem(<Link to={ADMIN_PATH.INCIDENT_REPORT}>Yêu cầu hỗ trợ</Link>, '10')
   ]),
   getItem('Cấu hình', 'sub2', <SettingOutlined />, [
     getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '11', <BookOutlined />)
@@ -67,7 +75,7 @@ const itemsMenu: MenuItem[] = [
 ]
 
 const AdminLayout: React.FC = ({ children }: any) => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const [titleHeader, setTitleHeader] = useState<string>('Tổng quan')
   const [keySider, setKeySider] = useState<string>('')
   const navigate = useNavigate()
@@ -167,6 +175,14 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setTitleHeader('Hợp đồng thuê phòng')
           setKeySider('8')
           break
+        case ADMIN_PATH.INCIDENT_REPORT:
+          setTitleHeader('Yêu cầu hỗ trợ')
+          setKeySider('10')
+          break
+        case ADMIN_PATH.STUDENT:
+          setTitleHeader('Sinh viên')
+          setKeySider('12')
+          break
 
         default:
           setTitleHeader('Tổng quan')
@@ -176,7 +192,13 @@ const AdminLayout: React.FC = ({ children }: any) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider
+        theme='light'
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        className='admin-sidebar-sticky'
+      >
         <div className='w-full flex justify-center'>
           <img src='/logo-utt-2.png' className='w-[100px] mt-3' />
         </div>
@@ -194,7 +216,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
             </div>
           </div>
         </Header>
-        <Content className='bg-while p-4'>{children}</Content>
+        <Content className='bg-while p-4 admin-layout-content'>{children}</Content>
         {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©{new Date().getFullYear()} Created by Ant UED</Footer> */}
       </Layout>
     </Layout>

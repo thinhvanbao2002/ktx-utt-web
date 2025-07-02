@@ -1,8 +1,9 @@
 export interface IRoomType {
   id?: number
   name: string
-  price: string
-  max_student: string
+  price: number
+  max_student: number
+  gender?: 'male' | 'female'
 }
 
 export interface IPayLoadLisCategory {

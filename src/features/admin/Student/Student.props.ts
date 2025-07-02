@@ -19,6 +19,7 @@ export interface IAccount {
   cccd_code?: string
   class_code?: string
   student_code?: string
+  hometown?: string
 }
 export interface IPayLoadListUser {
   page?: number

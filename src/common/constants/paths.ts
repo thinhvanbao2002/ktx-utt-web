@@ -9,6 +9,7 @@ export const ADMIN_PATH = {
   CREATE_UPDATE_BLOG: '/ad-ce-blog',
   UPDATE_ORDER: '/ad-e-order',
   ORDER: '/ad-order',
+  INCIDENT_REPORT: '/ad-incident-report',
   BLOG: '/ad-blog',
   UPLOAD: '/upload',
   UPLOADS: '/upload-multipart',
@@ -18,7 +19,8 @@ export const ADMIN_PATH = {
   REN_ROOM: '/rental/request',
   RENTAL_LIST: '/rental',
   RENTAL_MY_REQUEST: '/rental/my-request',
-  RENTAL_DETAIL: '/rental/detail'
+  RENTAL_DETAIL: '/rental/detail',
+  STUDENT: '/student'
 }
 
 export const USER_PATH = {

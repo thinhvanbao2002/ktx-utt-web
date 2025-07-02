@@ -2,17 +2,17 @@
 import { Button, Row, Spin, Tag } from 'antd'
 import { Styled } from 'styles/stylesComponent'
 import { useCallback, useEffect, useState } from 'react'
-import FilterAccount from './components/FilterAccount'
-import { IAccount, IColumnAntD, IPayLoadListUser } from './Manager.props'
-import { accountServices } from './ManagerApis'
+import FilterAccount from './components/FilterStudent'
+import { IAccount, IColumnAntD, IPayLoadListUser } from './Student.props'
+import { accountServices } from './StudentApis'
 import { getDataSource, openNotification, openNotificationError } from 'common/utils'
 import ModalComponent from 'common/components/modal/Modal'
-import { AddEditManager } from './components/AddEditAccount'
+import { AddEditManager } from './components/AddEditStudent'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 
-function ManagerPage() {
+function StudentPage() {
   const [page, setPage] = useState<number>(1)
   const [payload, setPayload] = useState<IPayLoadListUser>({
     page: 1,
@@ -21,7 +21,7 @@ function ManagerPage() {
     status: '',
     to_date: '',
     from_date: '',
-    role: 'admin'
+    role: 'student'
   })
   const [accounts, setAccount] = useState<any>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -108,7 +108,9 @@ function ManagerPage() {
 
   const handleGetAccount = async (payload?: IPayLoadListUser) => {
     try {
-      const res = await accountServices.get({ ...payload, role: 'admin' })
+      console.log('payload', payload)
+
+      const res = await accountServices.get({ ...payload, role: 'student' })
       setAccount(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
@@ -122,7 +124,7 @@ function ManagerPage() {
 
   const handleFilter = useCallback(
     (value: any) => {
-      const newPayload = { ...payload, role: 'admin' }
+      const newPayload = { ...payload, role: 'student' }
       if (value?.status) {
         newPayload.status = value.status
         newPayload.page = 1
@@ -156,14 +158,20 @@ function ManagerPage() {
       cccd_code: value?.cccd_code,
       class_code: value?.class_code,
       student_code: value?.student_code,
-      role: value?.role
+      role: value?.role,
+      hometown: value?.hometown
     }
     let res
     try {
       if (rowSelected?.id) {
         res = await accountServices.put(payLoadAccount)
       } else {
-        res = await accountServices.post({ ...payLoadAccount, password: value?.password, status: 'active' })
+        res = await accountServices.post({
+          ...payLoadAccount,
+          password: value?.password,
+          status: 'active',
+          role: 'student'
+        })
       }
 
       console.log('🚀 ~ handleSubmit ~ res:', res)
@@ -259,4 +267,4 @@ function ManagerPage() {
   )
 }
 
-export default ManagerPage
+export default StudentPage

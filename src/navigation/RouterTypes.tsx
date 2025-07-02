@@ -14,7 +14,7 @@ const AdminProductPage = lazy(() => import('../features/admin/Room/RoomPage.tsx'
 const AdminProductForm = lazy(() => import('../features/admin/Room/components/AddEditRoom.tsx'))
 const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
 const AddEditBlogPage = lazy(() => import('../features/admin/Blog/components/AddEditBlog.tsx'))
-const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'))
+const IncidentReportList = lazy(() => import('../features/admin/Claim/ClaimPage.tsx'))
 const AdminEditOrder = lazy(() => import('../features/admin/Order/components/OrderDetail.tsx'))
 const RoomType = lazy(() => import('../features/admin/RoomType/RoomTypePage.tsx'))
 const DevicePage = lazy(() => import('../features/admin/Device/DevicePage.tsx'))
@@ -22,6 +22,7 @@ const RoomImageView = lazy(() => import('../features/admin/Room/components/RoomI
 const RentalList = lazy(() => import('../features/admin/Rental/pages/RentalListPage'))
 const RenRoom = lazy(() => import('../features/admin/Rental/pages/RentalRequestPage'))
 const RentalDetailPage = lazy(() => import('../features/admin/Rental/pages/RentalDetailPage'))
+const StudentPage = lazy(() => import('../features/admin/Student/StudentPage.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
@@ -31,7 +32,6 @@ const RegisterPage = lazy(() => import('../features/customer/register/Register.t
 const ProductPage = lazy(() => import('../features/customer/product/Product.tsx'))
 const ProductDetail = lazy(() => import('../features/customer/detailProduct/DetailProduct.tsx'))
 const CartPage = lazy(() => import('../features/customer/cart/Cart.tsx'))
-const OrderPage = lazy(() => import('../features/customer/order/Order.tsx'))
 const UploadFile = lazy(() => import('../common/components/upload/UploadComponent.tsx'))
 const UploadMultipartFile = lazy(() => import('../common/components/upload/UploadMultipartComponent.tsx'))
 const OrderSuccess = lazy(() => import('../features/customer/successOrder/SuccessOrder.tsx'))
@@ -94,6 +94,11 @@ export const adminRoutes: Array<RouterProps> = [
     layout: AdminLayout
   },
   {
+    path: ADMIN_PATH.STUDENT,
+    component: StudentPage,
+    layout: AdminLayout
+  },
+  {
     path: ADMIN_PATH.BLOG,
     component: BlogForm,
     layout: AdminLayout
@@ -104,8 +109,8 @@ export const adminRoutes: Array<RouterProps> = [
     layout: AdminLayout
   },
   {
-    path: ADMIN_PATH.ORDER,
-    component: AdminOrderPage,
+    path: ADMIN_PATH.INCIDENT_REPORT,
+    component: IncidentReportList,
     layout: AdminLayout
   },
   {
@@ -179,11 +184,6 @@ export const publicRoutes: Array<RouterProps> = [
   {
     path: USER_PATH.CART,
     component: CartPage,
-    layout: UserLayout
-  },
-  {
-    path: USER_PATH.ORDER,
-    component: OrderPage,
     layout: UserLayout
   },
   {

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row } from 'antd'
+import { Button, Col, Form, Input, Row, Select } from 'antd'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
 
 import { IRoomType } from '../RoomType.props'
@@ -16,7 +16,8 @@ export const AddEditCategory = ({ onFinish, onClose, rowSelected }: IAddEditCate
   const initialvalue = {
     name: rowSelected?.name,
     price: rowSelected?.price,
-    max_student: rowSelected?.max_student
+    max_student: rowSelected?.max_student,
+    gender: rowSelected?.gender || 'male'
   }
   console.log('🚀 ~ AddEditCategory ~ initialvalue:', initialvalue)
 
@@ -64,7 +65,7 @@ export const AddEditCategory = ({ onFinish, onClose, rowSelected }: IAddEditCate
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={24}></Row>
+
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item
@@ -82,6 +83,18 @@ export const AddEditCategory = ({ onFinish, onClose, rowSelected }: IAddEditCate
             ]}
           >
             <Input />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name='gender'
+            label='Loại phòng cho'
+            rules={[{ required: true, message: 'Vui lòng chọn loại phòng cho nam hay nữ!' }]}
+          >
+            <Select>
+              <Select.Option value='male'>Nam</Select.Option>
+              <Select.Option value='female'>Nữ</Select.Option>
+            </Select>
           </Form.Item>
         </Col>
         {/* {rowSelected && (

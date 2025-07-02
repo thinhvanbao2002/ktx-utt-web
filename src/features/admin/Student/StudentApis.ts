@@ -1,7 +1,7 @@
 import { handleObjectEmpty } from 'common/utils'
 import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
-import { IAccount } from './Manager.props'
+import { IAccount } from './Student.props'
 
 export interface IQuery {
   page: number
@@ -25,7 +25,7 @@ export const accountServices = {
     const url = '/user'
     return AxiosClient.post(url, {
       ...value,
-      role: 'admin'
+      role: 'student'
     })
   },
   put: (value: IAccount) => {

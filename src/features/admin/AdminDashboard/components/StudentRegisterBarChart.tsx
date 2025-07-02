@@ -14,7 +14,7 @@ const StudentRegisterBarChart = () => {
         setData(res as unknown as { month: number; count: number }[])
       }
     } catch (error) {
-      console.log('---- error ----',error)
+      console.log('----', error)
     }
   }, [])
 

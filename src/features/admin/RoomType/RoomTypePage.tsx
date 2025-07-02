@@ -96,6 +96,7 @@ function RoomTypePage() {
   const handleGetCategories = async (payload?: any) => {
     try {
       const res = await roomTypeServices.get(payload)
+      console.log('🚀 ~ handleGetCategories ~ res:', res)
       setCategory(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
@@ -139,7 +140,8 @@ function RoomTypePage() {
       id: rowSelected?.id,
       name: value?.name,
       price: value?.price,
-      max_student: value?.max_student
+      max_student: value?.max_student,
+      gender: value?.gender
     }
     console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res

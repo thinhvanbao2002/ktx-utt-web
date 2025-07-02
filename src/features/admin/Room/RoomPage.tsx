@@ -82,7 +82,16 @@ function ProductPage() {
         let color = 'default'
         let label = text
 
-        switch (record.s) {
+        const current = record.room_students?.length ?? 0
+        const max = record.room_type?.max_student ?? 0
+        let status = record.s
+        if (max > 0 && current >= max) {
+          status = 'full'
+        } else if (status !== 'underMaintenance') {
+          status = 'available'
+        }
+
+        switch (status) {
           case 'available':
             color = 'blue'
             label = 'Còn trống'
@@ -114,6 +123,10 @@ function ProductPage() {
       key: 'tt',
       dataIndex: 'tt',
       render: (value: number, record: any) => {
+        const current = record.room_students?.length ?? 0
+        const max = record.room_type?.max_student ?? 0
+        const isFull = (max > 0 && current >= max) || record.s === 'full'
+
         return (
           <div style={{ display: 'flex' }}>
             <TooltipCustom
@@ -128,17 +141,19 @@ function ProductPage() {
               }
             />
 
-            <TooltipCustom
-              title='Thuê phòng'
-              children={
-                <Button
-                  type='text'
-                  className='btn-rent-text'
-                  icon={<HomeOutlined />}
-                  onClick={() => handleRentRoom(record)}
-                />
-              }
-            />
+            {!isFull && (
+              <TooltipCustom
+                title='Thuê phòng'
+                children={
+                  <Button
+                    type='text'
+                    className='btn-rent-text'
+                    icon={<HomeOutlined />}
+                    onClick={() => handleRentRoom(record)}
+                  />
+                }
+              />
+            )}
 
             {user?.role === 'admin' && (
               <TooltipCustom
@@ -273,8 +288,9 @@ function ProductPage() {
     <>
       <FilterProduct onChangeValue={handleFilterProduct} />
       <Row className='mb-2 flex justify-end mt-2'>
-        <Button
-          className='bg-baseBackground 
+        {user?.role === 'admin' && (
+          <Button
+            className='bg-baseBackground 
                     hover:!bg-hoverBase 
                     text-while  
                     border-none 
@@ -282,11 +298,13 @@ function ProductPage() {
                     hover:shadow-none
                     hover:border-none 
                     hover:!text-while'
-          onClick={handleNavigateAddProduct}
-        >
-          Thêm mới
-        </Button>
-        <Button
+            onClick={handleNavigateAddProduct}
+          >
+            Thêm mới
+          </Button>
+        )}
+        {/* {user?.role === 'admin' &&
+          <Button
           className='bg-baseBackground 
                     hover:!bg-hoverBase 
                     text-while  
@@ -300,6 +318,7 @@ function ProductPage() {
         >
           Xuất Excel
         </Button>
+        } */}
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

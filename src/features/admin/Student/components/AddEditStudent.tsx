@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row } from 'antd'
 import Config from 'common/constants/config'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
-import { IAccount } from '../Manager.props'
+import { IAccount } from '../Student.props'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 
 interface IAddEditAccount {
@@ -23,8 +23,12 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     role: rowSelected?.role || 'admin',
     cccd_code: rowSelected?.cccd_code,
     class_code: rowSelected?.class_code,
-    student_code: rowSelected?.student_code
+    student_code: rowSelected?.student_code,
+    hometown: rowSelected?.hometown
   }
+  console.log('🚀 ~ initialvalue:', initialvalue)
+
+  const isEdit = !!rowSelected
 
   return (
     <Form
@@ -48,7 +52,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input />
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -68,7 +72,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input />
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
       </Row>
@@ -88,7 +92,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input />
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -112,6 +116,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
                 { value: 'student', text: 'Sinh viên' }
               ]}
               placeholder='Chọn vai trò'
+              disabled={isEdit}
             />
           </Form.Item>
         </Col>
@@ -159,29 +164,36 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
                   { value: 'inactive', text: 'Ngừng hoạt động' }
                 ]}
                 placeholder='Trạng thái'
+                disabled={isEdit}
               />
             </Form.Item>
           </Col>
         )}
         <Col span={12}>
           <Form.Item name='cccd_code' label='Mã căn cước'>
-            <Input type='cccd_code' />
+            <Input type='cccd_code' disabled={isEdit} />
           </Form.Item>
         </Col>
       </Row>
-      {/* <Row gutter={24}>
+      <Row gutter={24}>
         <Col span={12}>
           <Form.Item name='class_code' label='Mã lớp'>
-            <Input />
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item name='student_code' label='Mã sinh viên'>
-            <Input />
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
-      </Row> */}
-
+      </Row>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name='hometown' label='Quê quán'>
+            <Input placeholder='Nhập quê quán (không bắt buộc)' disabled={isEdit} />
+          </Form.Item>
+        </Col>
+      </Row>
       <Row gutter={24}>
         <Col span={12}> </Col>
         <Col span={12} className='flex items-center justify-end'>

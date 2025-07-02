@@ -5,9 +5,9 @@ import { ShowConfirm } from 'common/components/Alert'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { IColumnAntD } from 'common/constants/interface'
 import { Styled } from 'styles/stylesComponent'
-import FilterOrder from './components/FilterOrder'
+import FilterOrder from './components/FilterIncidentReport'
 import { useCallback, useEffect, useState } from 'react'
-import { orderServices } from './OrderApis'
+import { orderServices } from './IncidentReportApis'
 import { formatPrice, getDataSource, vldOrderStatus } from 'common/utils'
 import { isNil, values } from 'lodash'
 import { useNavigate } from 'react-router'
@@ -15,7 +15,7 @@ import { ADMIN_PATH } from 'common/constants/paths'
 import styled from 'styled-components'
 import IconAntd from 'common/components/iconAntd'
 
-function AdminOrderPage() {
+function IncidentReport() {
   const [loadingRefresh, setLoadingRefresh] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [orders, setOrders] = useState<Array<any>>([])
@@ -29,7 +29,7 @@ function AdminOrderPage() {
     to_date: '',
     from_date: ''
   })
-  console.log('🚀 ~ AdminOrderPage ~ payload:', payload)
+  console.log('🚀 ~ IncidentReport ~ payload:', payload)
   const columnsListAccount: IColumnAntD[] = [
     {
       title: 'STT',
@@ -221,7 +221,7 @@ function AdminOrderPage() {
   )
 }
 
-export default AdminOrderPage
+export default IncidentReport
 
 const ResultStyled = styled.div`
   font-size: 14px;

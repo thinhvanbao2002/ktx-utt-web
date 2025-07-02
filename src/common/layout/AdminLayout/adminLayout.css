@@ -1,0 +1,16 @@
+.admin-sidebar-sticky {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 20;
+  background: #fff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  width: 200px;
+  transition: width 0.2s;
+}
+
+.admin-layout-content {
+  padding-left: 200px;
+  transition: padding-left 0.2s;
+}
