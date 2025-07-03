@@ -3,7 +3,6 @@ import { Col, Row } from 'antd'
 import RJSearch from 'common/components/search/RJSearch'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import RangerPicker from 'common/components/rangePicker/RangePicker'
-import { SortBy } from '../constants/room.constants'
 import { useEffect, useState } from 'react'
 import { categoryServices } from 'features/admin/Building/BuildingApis'
 
@@ -54,7 +53,7 @@ function FilterProduct({ onChangeValue }: IFilter) {
             }}
           />
         </Col>
-        <Col md={8}>
+        {/* <Col md={8}>
           <RadiusSelection
             placeholder={'Trạng thái phòng'}
             onChange={(value: number) => {
@@ -68,6 +67,19 @@ function FilterProduct({ onChangeValue }: IFilter) {
               { value: '3', text: 'Đang bảo trì' }
             ]}
           />
+        </Col> */}
+        <Col md={8}>
+          <RadiusSelection
+            showSearch={true}
+            onSearch={(e) => onChangeSearchCategory(e)}
+            placeholder={'Tòa nhà'}
+            onChange={(value: number) => {
+              let tmpValue
+              value === undefined ? (tmpValue = null) : (tmpValue = value)
+              onChangeValue({ categoryId: tmpValue })
+            }}
+            options={categoryListOptions}
+          />
         </Col>
         <Col md={8}>
           <RangerPicker
@@ -76,7 +88,7 @@ function FilterProduct({ onChangeValue }: IFilter) {
           />
         </Col>
       </Row>
-      <Row gutter={24} className='mt-4'>
+      {/* <Row gutter={24} className='mt-4'>
         <Col md={8}>
           <RadiusSelection
             allowClear
@@ -105,7 +117,7 @@ function FilterProduct({ onChangeValue }: IFilter) {
             options={categoryListOptions}
           />
         </Col>
-      </Row>
+      </Row> */}
     </>
   )
 }

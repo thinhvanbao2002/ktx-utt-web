@@ -1,5 +1,4 @@
 import { Button, Row, Spin } from 'antd'
-import FilterCategory from './components/FilterRoomType'
 import { useCallback, useEffect, useState } from 'react'
 import { IColumnAntD } from 'common/constants/interface'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
@@ -108,31 +107,31 @@ function RoomTypePage() {
     handleGetCategories(payload)
   }, [payload])
 
-  const handleFilter = useCallback(
-    (value: any) => {
-      if (value?.status !== null || value?.status !== undefined) {
-        setPayload({
-          ...payload,
-          status: value.status,
-          page: 1
-        })
-      }
-      if (value?.date) {
-        setPayload({
-          ...payload,
-          from_date: value?.date.split(',')[0],
-          to_date: value?.date.split(',')[1]
-        })
-      }
-      if (value?.search) {
-        setPayload({
-          ...payload,
-          q: value?.search
-        })
-      }
-    },
-    [payload]
-  )
+  // const handleFilter = useCallback(
+  //   (value: any) => {
+  //     if (value?.status !== null || value?.status !== undefined) {
+  //       setPayload({
+  //         ...payload,
+  //         status: value.status,
+  //         page: 1
+  //       })
+  //     }
+  //     if (value?.date) {
+  //       setPayload({
+  //         ...payload,
+  //         from_date: value?.date.split(',')[0],
+  //         to_date: value?.date.split(',')[1]
+  //       })
+  //     }
+  //     if (value?.search) {
+  //       setPayload({
+  //         ...payload,
+  //         q: value?.search
+  //       })
+  //     }
+  //   },
+  //   [payload]
+  // )
 
   const handleSubmit = async (value: any) => {
     setIsLoading(true)
@@ -198,7 +197,7 @@ function RoomTypePage() {
   return (
     <>
       <Row gutter={[15, 6]} className='mb-2'>
-        <FilterCategory onChangeValue={handleFilter} />
+        {/* <FilterCategory onChangeValue={handleFilter} /> */}
       </Row>
       <Row className='mb-2 flex justify-end'>
         <Button

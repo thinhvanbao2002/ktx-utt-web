@@ -9,7 +9,7 @@ import { getDataSource, openNotification, openNotificationError } from 'common/u
 import ModalComponent from 'common/components/modal/Modal'
 import { AddEditManager } from './components/AddEditStudent'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 
 function StudentPage() {
@@ -84,7 +84,7 @@ function StudentPage() {
                 <Button
                   type={'text'}
                   className={'btn-success-text'}
-                  icon={<EditOutlined />}
+                  icon={<EyeOutlined />}
                   onClick={() => handleEditAccount(record)}
                 />
               }
@@ -197,6 +197,8 @@ function StudentPage() {
   }
 
   const handleEditAccount = useCallback(async (record: IAccount) => {
+    console.log('---- RECORD -----', record)
+
     setModalVisible(true)
     setRowSelected(record)
   }, [])

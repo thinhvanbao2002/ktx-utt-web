@@ -30,9 +30,9 @@ const RoomImageView = () => {
             <Button danger onClick={() => navigate(ADMIN_PATH.ROOM)}>
               Thoát
             </Button>
-            <Button htmlType='submit' className='btn-confirm'>
+            {/* <Button htmlType='submit' className='btn-confirm'>
               Thuê phòng ngay
-            </Button>
+            </Button> */}
           </div>
 
           {/* Ảnh panorama */}

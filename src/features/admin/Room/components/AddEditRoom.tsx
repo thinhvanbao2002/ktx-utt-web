@@ -28,12 +28,12 @@ const studentColumns = [
     title: 'Email',
     dataIndex: ['user', 'email'],
     key: 'email'
-  },
-  {
-    title: 'Vai trò',
-    dataIndex: ['user', 'role'],
-    key: 'role'
   }
+  // {
+  //   title: 'Vai trò',
+  //   dataIndex: ['user', 'role'],
+  //   key: 'role'
+  // }
 ]
 
 const AddEditRoom = () => {

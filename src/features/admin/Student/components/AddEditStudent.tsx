@@ -13,6 +13,8 @@ interface IAddEditAccount {
 export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccount) => {
   const [form] = Form.useForm()
 
+  console.log('---- row selected ----', rowSelected)
+
   const initialvalue = {
     name: rowSelected?.name,
     phone: rowSelected?.phone,
@@ -24,7 +26,10 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     cccd_code: rowSelected?.cccd_code,
     class_code: rowSelected?.class_code,
     student_code: rowSelected?.student_code,
-    hometown: rowSelected?.hometown
+    hometown: rowSelected?.hometown,
+    room_number: rowSelected?.latest_room?.room_number,
+    price: rowSelected?.latest_room?.room_type?.price,
+    building: rowSelected?.latest_room?.building?.name
   }
   console.log('🚀 ~ initialvalue:', initialvalue)
 
@@ -191,6 +196,23 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
         <Col span={12}>
           <Form.Item name='hometown' label='Quê quán'>
             <Input placeholder='Nhập quê quán (không bắt buộc)' disabled={isEdit} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name='room_number' label='Phòng hiện tại'>
+            <Input disabled={isEdit} />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name='price' label='Giá phòng (Hiện đang ở)'>
+            <Input disabled={isEdit} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name='building' label='Toà nhà (Hiện đang ở)'>
+            <Input disabled={isEdit} />
           </Form.Item>
         </Col>
       </Row>

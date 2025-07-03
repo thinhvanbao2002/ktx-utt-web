@@ -185,9 +185,9 @@ const RentalDetailPage = () => {
                 Phê duyệt
               </Button>
             )}
-            <Button danger onClick={handleCancel}>
+            {/* <Button danger onClick={handleCancel}>
               Hủy thuê phòng
-            </Button>
+            </Button> */}
             <Button onClick={() => form.resetFields()}>Cập nhật</Button>
             <Button onClick={() => navigate(-1)}>Thoát</Button>
           </>

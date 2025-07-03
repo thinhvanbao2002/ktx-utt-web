@@ -1,5 +1,4 @@
 import { Button, Row, Spin, Tag } from 'antd'
-import FilterCategory from './components/FilterClaim'
 import { useCallback, useEffect, useState } from 'react'
 import { IColumnAntD } from 'common/constants/interface'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
@@ -31,12 +30,16 @@ function ClaimPage() {
   const [rowSelected, setRowSelected] = useState<IClaim | undefined>()
 
   const columnsListClaim: IColumnAntD[] = [
-    {
-      title: 'STT',
-      key: 'STT',
-      dataIndex: 'STT',
-      width: 40
-    },
+    // {
+    //   title: 'STT',
+    //   key: 'STT',
+    //   dataIndex: 'STT',
+    //   render: (value: string, record: IClaim) => {
+    //     console.log('---- value ----', record);
+
+    //       return <div color='green'>1</div>
+    //   }
+    // },
     {
       title: 'Mã SV',
       key: 'student_code',
@@ -147,9 +150,9 @@ function ClaimPage() {
     // eslint-disable-next-line
   }, [payload])
 
-  const handleFilter = useCallback((value: any) => {
-    setPayload((prev) => ({ ...prev, ...value, page: 1 }))
-  }, [])
+  // const handleFilter = useCallback((value: any) => {
+  //   setPayload((prev) => ({ ...prev, ...value, page: 1 }))
+  // }, [])
 
   const handleSubmit = async (value: any) => {
     setIsLoading(true)
@@ -214,7 +217,7 @@ function ClaimPage() {
   return (
     <>
       <Row gutter={[15, 6]} className='mb-2'>
-        <FilterCategory onChangeValue={handleFilter} />
+        {/* <FilterCategory onChangeValue={handleFilter} /> */}
       </Row>
       <Row className='mb-2 flex justify-end'>
         <Button

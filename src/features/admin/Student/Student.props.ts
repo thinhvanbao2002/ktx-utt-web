@@ -20,6 +20,9 @@ export interface IAccount {
   class_code?: string
   student_code?: string
   hometown?: string
+  room_number?: string
+  price?: number
+  building?: string
 }
 export interface IPayLoadListUser {
   page?: number
