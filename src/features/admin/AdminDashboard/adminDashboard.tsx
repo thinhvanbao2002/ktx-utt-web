@@ -88,7 +88,7 @@ function AdminDashboardScreen() {
             <div className='w-[20%] h-[100px] shadow-block rounded-md bg-baseBackground flex items-center justify-center  '>
               <div className='text-center'>
                 <div>Yêu cầu hỗ trợ</div>
-                <div className='font-semibold text-custom-xl'>{formatPrice(adminDashboardData.countOrders)}</div>
+                <div className='font-semibold text-custom-xl'>{formatPrice(adminDashboardData.claim)}</div>
               </div>
             </div>
           </div>
